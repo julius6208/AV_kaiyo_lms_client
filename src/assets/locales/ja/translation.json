@@ -1,0 +1,10 @@
+{
+  "login": {
+    "id": "ID",
+    "password": "パスワード",
+    "show_password": "パスワードを表示する",
+    "login": "ログイン",
+    "forgot_password": "パスワードを変更される方はこちら"
+  },
+  "errors": {}
+}
