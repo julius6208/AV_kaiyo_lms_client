@@ -9,6 +9,7 @@ export const Image: React.FC<BoxProps & { src: string; alt?: string }> = ({
 }) => {
   return (
     <Box
+      display="flex"
       sx={{
         overflow: "hidden",
         "& img": { objectFit: "cover", maxWidth: "100%", height: "auto" },

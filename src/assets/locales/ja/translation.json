@@ -16,5 +16,33 @@
     "confirm_password": "新しいパスワード（確認用）",
     "change_password": "新しいパスワードに変更する"
   },
+  "sidebar": {
+    "back_to_home": "ホーム画面に戻る",
+    "logout": "ログアウト"
+  },
+  "menu": {
+    "my_page": "マイページ",
+    "application_list": "申請一覧",
+    "user_list": "ユーザー一覧",
+    "students": "生徒一覧",
+    "guardians": "保護者一覧",
+    "faculty_staff": "教職員一覧",
+    "meal": "喫食",
+    "meal_management": "喫食管理",
+    "meal_choices": "喫食選択",
+    "pdf_transfer": "PDF個別送信"
+  },
+  "mypage": {
+    "new_notifications": "新着情報",
+    "view_personal_info": "個人情報を閲覧する",
+    "personal_info": "個人情報",
+    "name": "氏名",
+    "furigana": "ふりがな",
+    "faculty_staff": "教職員区分",
+    "postal_code": "郵便番号",
+    "address": "住所",
+    "phone": "電話番号",
+    "contact_tip": "個人情報についてのお問い合わせは、学園の担当者まで"
+  },
   "errors": {}
 }

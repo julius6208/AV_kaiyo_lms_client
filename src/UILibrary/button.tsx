@@ -1,7 +1,7 @@
 import React from "react"
 import { LoadingButton, LoadingButtonProps } from "@mui/lab"
 
-export const Button: React.FC<LoadingButtonProps> = ({ children, sx, ...rest }) => {
+export const Button: React.FC<LoadingButtonProps> = ({ color, children, sx, ...rest }) => {
   return (
     <LoadingButton
       sx={{
@@ -9,11 +9,12 @@ export const Button: React.FC<LoadingButtonProps> = ({ children, sx, ...rest }) 
         lineHeight: 1,
         fontWeight: 700,
         textTransform: "capitalize",
-        borderRadius: 1,
+        borderRadius: color === "info" ? "9px" : 1,
         py: 1.625,
         px: 2.5,
         ...sx,
       }}
+      color={color}
       {...rest}
     >
       {children}

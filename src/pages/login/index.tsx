@@ -36,7 +36,7 @@ export const Login: React.FC = () => {
               ".MuiTypography-root": {
                 fontSize: 12,
                 lineHeight: 1,
-                color: "info.main",
+                color: "primary.light",
                 fontWeight: 600,
                 letterSpacing: 2,
               },

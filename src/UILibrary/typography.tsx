@@ -46,4 +46,10 @@ export const Typography = {
     lineHeight: "1.25rem",
     fontWeight: 400,
   }),
+
+  Description: TypographyComponentWithStyles({
+    fontSize: { md: "1.25rem", xs: "0.875rem" },
+    lineHeight: 1,
+    fontWeight: 400,
+  }),
 }
