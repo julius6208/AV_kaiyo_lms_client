@@ -1,5 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 
 import { Box, Image, TextField, Button, Switch, FormControlLabel, Typography } from "src/UILibrary"
 
@@ -7,6 +8,11 @@ import LogoImage from "src/assets/imgs/logo.png"
 
 export const Login: React.FC = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
+  const onClickForgotPassword = () => {
+    navigate("/reset-password")
+  }
 
   return (
     <Box
@@ -51,6 +57,7 @@ export const Login: React.FC = () => {
               color: "primary.main",
             },
           }}
+          onClick={onClickForgotPassword}
         >
           {t("login.forgot_password")}
         </Typography.Detail>

@@ -6,5 +6,15 @@
     "login": "ログイン",
     "forgot_password": "パスワードを変更される方はこちら"
   },
+  "reset_password": {
+    "email": "メールアドレス",
+    "receive_verification_code": "認証コードをメールで受け取る",
+    "verification_code_tip": "このボタンを押すと、入力されたメールアドレスに認証コードが送信されます。",
+    "verification_code_placeholder": "6桁の認証コード",
+    "verification_code_submit": "認証コードを送る",
+    "new_password": "新しいパスワード",
+    "confirm_password": "新しいパスワード（確認用）",
+    "change_password": "新しいパスワードに変更する"
+  },
   "errors": {}
 }

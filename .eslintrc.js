@@ -24,7 +24,7 @@ module.exports = {
     "prettier/prettier": "error",
     "react-hooks/rules-of-hooks": "error",
     "react/display-name": "off",
-    "react-hooks/exhaustive-deps": "error"
+    "react-hooks/exhaustive-deps": "error",
   },
   settings: {
     react: {

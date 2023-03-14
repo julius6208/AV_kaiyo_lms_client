@@ -8,7 +8,7 @@ export const Theme = createTheme({
     },
     primary: {
       main: "#00326E",
-      dark: "#002959",
+      dark: "#000000",
       contrastText: "#FFF",
     },
     text: {
