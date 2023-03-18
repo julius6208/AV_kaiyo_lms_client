@@ -19,7 +19,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
   }),
   overflowX: "hidden",
   background: theme.palette.primary.main,
-  color: theme.palette.text.secondary,
+  color: theme.palette.secondary.main,
   padding: "1.25rem 0",
 })
 

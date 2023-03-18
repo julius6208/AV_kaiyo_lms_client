@@ -16,6 +16,17 @@
     "confirm_password": "新しいパスワード（確認用）",
     "change_password": "新しいパスワードに変更する"
   },
+  "category": {
+    "all": "全て",
+    "go_out": "外出",
+    "absence": "欠席",
+    "go_home": "帰寮帰宅"
+  },
+  "approve_type": {
+    "un_approve": "未承認",
+    "approve": "承認",
+    "deny": "却下"
+  },
   "sidebar": {
     "back_to_home": "ホーム画面に戻る",
     "logout": "ログアウト"
@@ -43,6 +54,36 @@
     "address": "住所",
     "phone": "電話番号",
     "contact_tip": "個人情報についてのお問い合わせは、学園の担当者まで"
+  },
+  "application": {
+    "application": "申請",
+    "approve": "承認",
+    "no_approve": "未承認",
+    "back": "戻る",
+    "category": "申請区分",
+    "charge": "担当HM",
+    "checked": "チェックした",
+    "approve_request": "件の申請を承認しますか？",
+    "student": "生徒",
+    "parent": "保護者",
+    "deny": "却下",
+    "deny_reason": "却下理由",
+    "reason": "目的・理由",
+    "new_notification_list": "新着申請一覧",
+    "proxy_application": "代理申請",
+    "display_count": "表示件数",
+    "bulk_approval": "一括承認",
+    "registration_number": "登録No",
+    "filter_condition": "絞り込み条件を設定",
+    "application_time": "申請日時",
+    "departure_time": "出発日時",
+    "approval_status": "承認状態",
+    "return_time": "帰着日時",
+    "search_condition": "この条件で検索",
+    "time": "日時",
+    "select_all": "全選択",
+    "no_select_all": "全解除",
+    "student_number": "登録番号"
   },
   "errors": {}
 }

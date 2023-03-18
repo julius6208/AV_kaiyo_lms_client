@@ -12,6 +12,9 @@ export const Button: React.FC<LoadingButtonProps> = ({ color, children, sx, ...r
         borderRadius: color === "info" ? "9px" : 1,
         py: 1.625,
         px: 2.5,
+        "&:hover": {
+          bgcolor: "secondary.contrastText",
+        },
         ...sx,
       }}
       color={color}

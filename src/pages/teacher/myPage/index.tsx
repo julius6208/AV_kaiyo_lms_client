@@ -36,6 +36,7 @@ export const MyPage: React.FC = () => {
             sx={{
               p: 2.5,
               width: "100%",
+              color: "primary.dark",
               borderRadius: "10px",
               boxShadow: "0 1px 1px rgba(0, 0, 0, 0.25)",
               mb: {
@@ -60,8 +61,14 @@ export const MyPage: React.FC = () => {
               </Stack>
             ))}
           </Paper>
-
-          <Button fullWidth color="info" variant="contained" onClick={switchView}>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={switchView}
+            sx={{
+              bgcolor: "secondary.dark",
+            }}
+          >
             {t("mypage.view_personal_info")}
           </Button>
         </Stack>

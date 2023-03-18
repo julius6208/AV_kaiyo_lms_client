@@ -52,7 +52,7 @@ export const ResetPassword: React.FC = () => {
                     ".MuiTypography-root": {
                       fontSize: 12,
                       lineHeight: 1,
-                      color: "info.main",
+                      color: "secondary.dark",
                       fontWeight: 600,
                       letterSpacing: 2,
                     },
