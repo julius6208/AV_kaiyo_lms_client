@@ -22,6 +22,7 @@ export const Modal = ({
           border: "1px solid",
           borderColor: "primary.dark",
           boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.08)",
+          width: { md: "720px", xs: "362px" },
         },
       }}
       onClose={handleClose}
@@ -55,10 +56,10 @@ export const Modal = ({
       )}
       <DialogContent
         sx={{
-          width: "720px",
           borderBottom: 0,
           borderTop: "1px solid",
           borderColor: "info.dark",
+          p: { md: "1.25rem 1.5rem", xs: "0" },
         }}
       >
         {children}

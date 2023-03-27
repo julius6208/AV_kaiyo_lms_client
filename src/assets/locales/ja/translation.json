@@ -41,7 +41,9 @@
     "meal": "喫食",
     "meal_management": "喫食管理",
     "meal_choices": "喫食選択",
-    "pdf_transfer": "PDF個別送信"
+    "pdf_transfer": "PDF個別送信",
+    "from_parent": "保護者からの申請",
+    "from_student": "生徒からの申請"
   },
   "mypage": {
     "new_notifications": "新着情報",
@@ -60,6 +62,7 @@
     "approve": "承認",
     "no_approve": "未承認",
     "back": "戻る",
+    "back_list": "一覧に戻る",
     "category": "申請区分",
     "charge": "担当HM",
     "checked": "チェックした",
@@ -83,7 +86,19 @@
     "time": "日時",
     "select_all": "全選択",
     "no_select_all": "全解除",
-    "student_number": "登録番号"
+    "register_number": "登録番号",
+    "past_application_list": "過去の申請履歴",
+    "new_apply": "新しく申請する",
+    "student_number": "生徒番号",
+    "student_name": "生徒名",
+    "departure_companion": "出発同伴者",
+    "return_companion": "帰着同伴者",
+    "application_content": "申請内容",
+    "send": "送信",
+    "send_confirm": "送信を確定しますか？",
+    "confirm": "確定",
+    "submit_confirm": "送信が確定しました",
+    "application_detail": "詳細内容"
   },
   "errors": {}
 }

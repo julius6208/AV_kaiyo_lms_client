@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next"
 import { Box, Button, TableCell, TableHead, TableRow, Typography } from "src/UILibrary"
 import { SortIcon } from "./sortIcon"
 
+import { useSession } from "src/modules/sessionProvider"
+
 // interface ApplicationTableHeaderProps {
 //   sortBy: string
 //   sortOrder: string
@@ -11,6 +13,8 @@ import { SortIcon } from "./sortIcon"
 
 export const ApplicationTableHeader: React.FC = () => {
   const { t } = useTranslation()
+  const session = useSession()
+
   return (
     <TableHead>
       <TableRow
@@ -86,45 +90,87 @@ export const ApplicationTableHeader: React.FC = () => {
         <TableCell rowSpan={2} sx={{ width: "100px" }}>
           {t("application.approval_status")}
         </TableCell>
-        <TableCell rowSpan={2}>
-          <Button
-            variant="outlined"
-            sx={{
-              p: 0,
-              minWidth: "inherit",
-              borderRadius: "0.3rem",
-              color: "secondary.dark",
-            }}
-          >
-            <Typography.Action
+        {session?.value.id === "teacher" ? (
+          <TableCell rowSpan={2}>
+            <Button
+              variant="outlined"
               sx={{
-                fontSize: "8px",
-                textAlign: "center",
+                p: 0,
+                minWidth: "inherit",
+                borderRadius: "0.3rem",
+                color: "secondary.dark",
               }}
             >
-              {t("application.select_all")}
-            </Typography.Action>
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{
-              p: 0,
-              mt: "1rem",
-              minWidth: "inherit",
-              borderRadius: "0.3rem",
-              color: "secondary.dark",
-            }}
-          >
-            <Typography.Action
+              <Typography.Action
+                sx={{
+                  fontSize: "8px",
+                  textAlign: "center",
+                }}
+              >
+                {t("application.select_all")}
+              </Typography.Action>
+            </Button>
+            <Button
+              variant="outlined"
               sx={{
-                fontSize: "8px",
-                textAlign: "center",
+                p: 0,
+                mt: "1rem",
+                minWidth: "inherit",
+                borderRadius: "0.3rem",
+                color: "secondary.dark",
               }}
             >
-              {t("application.no_select_all")}
-            </Typography.Action>
-          </Button>
-        </TableCell>
+              <Typography.Action
+                sx={{
+                  fontSize: "8px",
+                  textAlign: "center",
+                }}
+              >
+                {t("application.no_select_all")}
+              </Typography.Action>
+            </Button>
+          </TableCell>
+        ) : (
+          <TableCell rowSpan={2} sx={{ display: "none" }}>
+            <Button
+              variant="outlined"
+              sx={{
+                p: 0,
+                minWidth: "inherit",
+                borderRadius: "0.3rem",
+                color: "secondary.dark",
+              }}
+            >
+              <Typography.Action
+                sx={{
+                  fontSize: "8px",
+                  textAlign: "center",
+                }}
+              >
+                {t("application.select_all")}
+              </Typography.Action>
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{
+                p: 0,
+                mt: "1rem",
+                minWidth: "inherit",
+                borderRadius: "0.3rem",
+                color: "secondary.dark",
+              }}
+            >
+              <Typography.Action
+                sx={{
+                  fontSize: "8px",
+                  textAlign: "center",
+                }}
+              >
+                {t("application.no_select_all")}
+              </Typography.Action>
+            </Button>
+          </TableCell>
+        )}
       </TableRow>
       <TableRow
         sx={{
