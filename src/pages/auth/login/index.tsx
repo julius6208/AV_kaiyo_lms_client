@@ -1,17 +1,24 @@
-import React from "react"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { Box, Image, TextField, Button, Switch, FormControlLabel, Typography } from "src/UILibrary"
 
 import LogoImage from "src/assets/imgs/logo.png"
+import { ISession } from "src/types/session"
 
 export const Login: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const [authType, setAuthType] = useState<ISession>({ id: "" })
 
   const onClickForgotPassword = () => {
     navigate("/reset-password")
+  }
+
+  const nextPage = () => {
+    localStorage.setItem("auth", JSON.stringify(authType))
+    navigate("/my-page")
   }
 
   return (
@@ -26,7 +33,13 @@ export const Login: React.FC = () => {
     >
       <Box sx={{ width: 400, display: "flex", alignItems: "center", flexDirection: "column" }}>
         <Image src={LogoImage} alt="Logo" sx={{ mb: 3 }} />
-        <TextField fullWidth sx={{ fontWeight: 700, mb: 3 }} placeholder={t("login.id")} />
+        <TextField
+          fullWidth
+          sx={{ fontWeight: 700, mb: 3 }}
+          placeholder={t("login.id")}
+          value={authType.id}
+          onChange={(e) => setAuthType({ id: e.target.value })}
+        />
         <TextField fullWidth sx={{ fontWeight: 700, mb: 0.5 }} placeholder={t("login.password")} />
         <Box sx={{ width: "100%", pb: 0.5 }}>
           <FormControlLabel
@@ -43,7 +56,14 @@ export const Login: React.FC = () => {
             }}
           />
         </Box>
-        <Button fullWidth color="primary" variant="contained" sx={{ mb: 2.5 }}>
+        <Button
+          fullWidth
+          color="primary"
+          variant="contained"
+          sx={{ mb: 2.5 }}
+          // onClick={() => localStorage.setItem("auth", authType)}
+          onClick={nextPage}
+        >
           {t("login.login")}
         </Button>
         <Typography.Detail

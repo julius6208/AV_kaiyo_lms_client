@@ -28,6 +28,9 @@ export const Theme = createTheme({
       light: "#F5F5F5",
       dark: "#F4F4F4",
     },
+    error: {
+      main: "#DA2A2A",
+    },
     divider: "#E5E5E5",
   },
   components: {

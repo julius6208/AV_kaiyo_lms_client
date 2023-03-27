@@ -4,11 +4,13 @@ import { useTranslation } from "react-i18next"
 import { Box, Checkbox, TableCell, TableRow, Radio, Typography } from "src/UILibrary"
 
 import { Application } from "src/types/application"
+import { useSession } from "src/modules/sessionProvider"
+import { useNavigate } from "react-router-dom"
 
 interface ApplicationTableProps {
   keyValue: number
   content: Application
-  onEdit: Function
+  onEdit?: Function
   handleChecked: Function
 }
 
@@ -19,8 +21,12 @@ export const ApplicationTableItem: React.FC<ApplicationTableProps> = ({
   handleChecked,
 }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const session = useSession()
+
   const handleApplication = () => {
-    onEdit(content)
+    session?.value.id !== "teacher" && navigate(`/application/${content.id}`)
+    onEdit && onEdit(content)
   }
 
   const handleCheckboxClick = (event: any) => {
@@ -111,16 +117,18 @@ export const ApplicationTableItem: React.FC<ApplicationTableProps> = ({
           </Box>
         </Box>
       </TableCell>
-      <TableCell sx={{ display: "flex", justifyContent: "center" }}>
-        <Checkbox
-          sx={{ p: 0, m: 0, "& .MuiSvgIcon-root": { fontSize: "1.25rem" } }}
-          checked={content.checked}
-          onClick={handleCheckboxClick}
-          onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
-            handleChecked(content.id, evt.target.checked)
-          }
-        />
-      </TableCell>
+      {session?.value.id === "teacher" && (
+        <TableCell sx={{ display: "flex", justifyContent: "center" }}>
+          <Checkbox
+            sx={{ p: 0, m: 0, "& .MuiSvgIcon-root": { fontSize: "1.25rem" } }}
+            checked={content.checked}
+            onClick={handleCheckboxClick}
+            onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
+              handleChecked(content.id, evt.target.checked)
+            }
+          />
+        </TableCell>
+      )}
     </TableRow>
   )
 }
