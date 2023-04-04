@@ -38,6 +38,7 @@ export {
 export { type SvgIconTypeMap, type SelectChangeEvent } from "@mui/material"
 
 export {
+  Download as DownloadIcon,
   ExpandLess as ExpandLessIcon,
   ExpandMore as ExpandMoreIcon,
   KeyboardDoubleArrowUp as KeyboardDoubleArrowUpIcon,

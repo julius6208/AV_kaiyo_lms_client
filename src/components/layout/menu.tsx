@@ -43,9 +43,7 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
     setAnchorEl(null)
   }
 
-  // const authType: string | null = localStorage.getItem("auth")
   const session = useSession()
-  console.log(session, "session testing")
 
   useEffect(() => {
     if (session?.value.id === "teacher") {
@@ -69,12 +67,12 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
               path: "/teacher/students",
             },
             {
-              label: "menu.guardians",
-              path: "/teacher/guardians",
+              label: "menu.parents",
+              path: "/teacher/parents",
             },
             {
               label: "menu.faculty_staff",
-              path: "/teacher/staff",
+              path: "/teacher/staffs",
             },
           ],
         },

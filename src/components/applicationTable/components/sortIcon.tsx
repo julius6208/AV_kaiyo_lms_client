@@ -23,7 +23,16 @@ export const SortIcon: React.FC = () => {
           )}
         </>
       ) : ( */}
-      <UnfoldMoreIcon sx={{ width: "20px", height: "20px" }} />
+      <UnfoldMoreIcon
+        sx={{
+          width: "20px",
+          height: "20px",
+          cursor: "pointer",
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+        }}
+      />
       {/* )} */}
     </>
   )
