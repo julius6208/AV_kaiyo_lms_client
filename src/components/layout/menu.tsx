@@ -111,7 +111,7 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
         {
           label: "menu.meal",
           icon: MealIcon,
-          path: "/meal-choices",
+          path: "/meal-list",
         },
         {
           label: "menu.pdf_transfer",
@@ -134,7 +134,7 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
         {
           label: "menu.meal",
           icon: MealIcon,
-          path: "/meal-choices",
+          path: "/meal-list",
         },
         {
           label: "menu.pdf_transfer",

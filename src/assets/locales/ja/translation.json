@@ -163,5 +163,20 @@
     "model_nation_club": "模擬国連同好会",
     "art_club": "芸術同好会"
   },
+  "meal": {
+    "date": "日付",
+    "breakfast": "朝食",
+    "lunch": "昼食",
+    "dinner_a": "夕食(A)",
+    "dinner_b": "夕食(B)",
+    "dinner_c": "夕食(C)",
+    "menu_name": "メニュー名",
+    "energy": "エネルギー",
+    "protein": "タンパク",
+    "lipid": "脂質",
+    "salt": "塩分",
+    "check_detail": "詳細を確認する",
+    "detail": "詳細確認"
+  },
   "errors": {}
 }

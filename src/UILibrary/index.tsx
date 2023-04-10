@@ -33,6 +33,7 @@ export {
   TableHead,
   TableRow,
   type PaginationProps,
+  type SxProps,
 } from "@mui/material"
 
 export { type SvgIconTypeMap, type SelectChangeEvent } from "@mui/material"
@@ -48,6 +49,7 @@ export {
 
 export { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 export { LocalizationProvider, DatePicker } from "@mui/x-date-pickers"
+export { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 
 export { Button } from "./button"
 export { ExpandableList } from "./expandableList"
