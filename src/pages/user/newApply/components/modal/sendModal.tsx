@@ -30,7 +30,7 @@ export const SendModal: React.FC<SendModalProps> = ({
 
   return (
     <Modal handleClose={handleClose} open={open}>
-      <Box sx={{ py: { md: "5.75rem", xs: "4.0625rem" } }}>
+      <Box sx={{ py: { md: "5.75rem", xs: "4.0625rem" }, px: "3rem" }}>
         <Typography.Heading sx={{ textAlign: "center", fontWeight: 500 }}>
           {t("application.send_confirm")}
         </Typography.Heading>

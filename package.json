@@ -19,6 +19,7 @@
     "@types/react": "^18.0.10",
     "@types/react-dom": "^18.0.5",
     "date-fns": "^2.29.2",
+    "dayjs": "^1.11.7",
     "i18next": "^21.8.13",
     "i18next-browser-languagedetector": "^6.1.4",
     "nth-check": "^2.0.1",

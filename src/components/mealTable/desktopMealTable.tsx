@@ -12,13 +12,11 @@ import {
   Typography,
   Pagination,
 } from "src/UILibrary"
-import { SortIcon } from "../applicationTable/components/sortIcon"
 
 export interface FieldDefinition<T> {
   attribute: string
   label: string
   width?: number
-  sort?: boolean
   widget?: React.FC<{ value?: any; row?: T }>
 }
 
@@ -42,20 +40,25 @@ interface AdvancedTableParams<T> {
     count: number
     currentPage: number
   }
+  onDetail?: Function
 }
 
-export const UserTable = <T extends Record<string, any>>({
+export const MealTable = <T extends Record<string, any>>({
   content,
   fields,
   idField = "id",
   variant = "pagination",
   pagination,
+  onDetail,
 }: AdvancedTableParams<T>) => {
   const { t } = useTranslation()
+  const handleDetail = () => {
+    onDetail && onDetail(true)
+  }
 
   return (
     <TableContainer sx={{ mt: "1.6875rem" }}>
-      <Table size="small" sx={{ tableLayout: "fixed", width: "auto" }}>
+      <Table size="small" sx={{ tableLayout: "fixed" }}>
         <TableHead>
           <TableRow
             sx={{
@@ -63,7 +66,7 @@ export const UserTable = <T extends Record<string, any>>({
                 textAlign: "center",
                 color: "background.paper",
                 fontWeight: 500,
-                fontSize: "0.875rem",
+                fontSize: "24px",
                 lineHeight: "1.5rem",
                 p: "10px 2px",
                 borderWidth: "0 2px 0 0",
@@ -74,16 +77,14 @@ export const UserTable = <T extends Record<string, any>>({
                 },
                 "&:last-of-type": {
                   borderRadius: "0 9px 0 0",
-                  px: "10px",
                 },
               },
               overflow: "scroll",
             }}
           >
             {fields.map((field) => (
-              <TableCell key={field.label} sx={{ width: field.width, position: "relative" }}>
+              <TableCell key={field.label} sx={{ width: field.width }}>
                 {t(field.label)}
-                {field.sort === true && <SortIcon />}
               </TableCell>
             ))}
           </TableRow>
@@ -93,26 +94,18 @@ export const UserTable = <T extends Record<string, any>>({
             <TableRow
               key={row[idField]}
               sx={{
-                cursor: "pointer",
                 "&>td": {
-                  borderWidth: 0,
                   textAlign: "center",
-                  p: "0.625rem 0.5rem",
+                  p: "0.625rem 1.25rem",
                   color: "text.secondary",
-                  "&:first-of-type": {
-                    color: "secondary.dark",
-                  },
-                  "&:not(:last-of-type)": {
-                    borderWidth: "0 2px 2px 0",
-                    borderStyle: "solid",
-                    borderColor: "info.light",
-                    borderRightWidth: "2px",
-                    borderLeftWidth: "2px",
-                  },
+                  borderWidth: "2px 2px 0 0",
+                  borderStyle: "solid",
+                  borderColor: "info.light",
+                  borderCollapse: "collapse",
                 },
               }}
             >
-              {fields.map((f) => (
+              {fields.map((f, index) => (
                 <TableCell
                   key={`cell-${f.attribute}`}
                   sx={{
@@ -120,23 +113,45 @@ export const UserTable = <T extends Record<string, any>>({
                     width: f.width,
                   }}
                 >
-                  {f.widget ? (
-                    f.widget({ value: getProperty(row, f.attribute), row: row })
-                  ) : (
-                    <Typography.Action
-                      sx={{
-                        fontWeight: 400,
-                        lineHeight: "24px",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                        textOverflow: "hidden",
-                      }}
-                    >
-                      {getProperty(row, f.attribute)}
-                    </Typography.Action>
-                  )}
+                  <Box
+                    sx={{
+                      height: "85px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    {f.widget ? (
+                      f.widget({ value: getProperty(row, f.attribute), row: row })
+                    ) : (
+                      <Typography.Action
+                        sx={{
+                          fontSize: "18px",
+                          fontWeight: 400,
+                          whiteSpace: "nowrap",
+                          lineHeight: "24px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {getProperty(row, f.attribute)}
+                      </Typography.Action>
+                    )}
+                    {index !== 0 && (
+                      <Typography.Detail
+                        onClick={handleDetail}
+                        sx={{
+                          width: "100%",
+                          cursor: "pointer",
+                          fontSize: "10px",
+                          color: "secondary.dark",
+                          lineHeight: "0.625rem",
+                        }}
+                      >
+                        {t("meal.check_detail")}
+                      </Typography.Detail>
+                    )}
+                  </Box>
                 </TableCell>
               ))}
             </TableRow>

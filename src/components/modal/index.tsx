@@ -22,7 +22,8 @@ export const Modal = ({
           border: "1px solid",
           borderColor: "primary.dark",
           boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.08)",
-          width: { md: "720px", xs: "362px" },
+          width: { md: "720px" },
+          //width: { md: "720px", xs: "362px" },
         },
       }}
       onClose={handleClose}

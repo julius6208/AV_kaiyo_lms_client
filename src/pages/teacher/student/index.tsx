@@ -47,7 +47,6 @@ const fields: FieldDefinition<Student>[] = [
     attribute: "phone",
     label: "mypage.phone",
     width: 80,
-    fontSize: 10,
   },
   {
     attribute: "post_number",
@@ -59,7 +58,6 @@ const fields: FieldDefinition<Student>[] = [
     attribute: "address",
     label: "mypage.address",
     width: 120,
-    fontSize: 10,
   },
   {
     attribute: "grade",
@@ -105,13 +103,11 @@ const fields: FieldDefinition<Student>[] = [
     attribute: "parent",
     label: "application.parent",
     width: 80,
-    fontSize: 10,
   },
   {
     attribute: "parent_phone",
     label: "user_list.parent_phone",
     width: 70,
-    fontSize: 10,
   },
 ]
 

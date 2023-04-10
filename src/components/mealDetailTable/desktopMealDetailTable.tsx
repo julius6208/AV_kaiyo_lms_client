@@ -2,7 +2,6 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 
 import {
-  Box,
   Table,
   TableBody,
   TableCell,
@@ -10,15 +9,12 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Pagination,
 } from "src/UILibrary"
-import { SortIcon } from "../applicationTable/components/sortIcon"
 
 export interface FieldDefinition<T> {
   attribute: string
   label: string
   width?: number
-  sort?: boolean
   widget?: React.FC<{ value?: any; row?: T }>
 }
 
@@ -37,45 +33,28 @@ interface AdvancedTableParams<T> {
   content: T[]
   fields: FieldDefinition<T>[]
   idField?: string
-  variant?: "pagination" | "next-previous"
-  pagination?: {
-    count: number
-    currentPage: number
-  }
+  onDetail?: Function
 }
 
-export const UserTable = <T extends Record<string, any>>({
+export const MealDetailTable = <T extends Record<string, any>>({
   content,
   fields,
   idField = "id",
-  variant = "pagination",
-  pagination,
 }: AdvancedTableParams<T>) => {
   const { t } = useTranslation()
 
   return (
     <TableContainer sx={{ mt: "1.6875rem" }}>
-      <Table size="small" sx={{ tableLayout: "fixed", width: "auto" }}>
+      <Table size="small" sx={{ tableLayout: "fixed" }}>
         <TableHead>
           <TableRow
             sx={{
               "&>th": {
-                textAlign: "center",
-                color: "background.paper",
                 fontWeight: 500,
-                fontSize: "0.875rem",
-                lineHeight: "1.5rem",
-                p: "10px 2px",
-                borderWidth: "0 2px 0 0",
-                borderStyle: "solid",
-                bgcolor: "text.secondary",
-                "&:first-of-type": {
-                  borderRadius: "9px 0 0 0",
-                },
-                "&:last-of-type": {
-                  borderRadius: "0 9px 0 0",
-                  px: "10px",
-                },
+                fontSize: "14px",
+                color: "text.secondary",
+                lineHeight: "0.875rem",
+                p: "0.625rem 1.25rem",
               },
               overflow: "scroll",
             }}
@@ -83,7 +62,6 @@ export const UserTable = <T extends Record<string, any>>({
             {fields.map((field) => (
               <TableCell key={field.label} sx={{ width: field.width, position: "relative" }}>
                 {t(field.label)}
-                {field.sort === true && <SortIcon />}
               </TableCell>
             ))}
           </TableRow>
@@ -95,19 +73,13 @@ export const UserTable = <T extends Record<string, any>>({
               sx={{
                 cursor: "pointer",
                 "&>td": {
-                  borderWidth: 0,
-                  textAlign: "center",
-                  p: "0.625rem 0.5rem",
+                  p: "0.625rem 1.25rem",
                   color: "text.secondary",
-                  "&:first-of-type": {
-                    color: "secondary.dark",
-                  },
                   "&:not(:last-of-type)": {
-                    borderWidth: "0 2px 2px 0",
+                    borderWidth: "2px 2px 0 0",
                     borderStyle: "solid",
-                    borderColor: "info.light",
-                    borderRightWidth: "2px",
-                    borderLeftWidth: "2px",
+                    borderColor: "background.paper",
+                    borderCollapse: "collapse",
                   },
                 },
               }}
@@ -116,7 +88,6 @@ export const UserTable = <T extends Record<string, any>>({
                 <TableCell
                   key={`cell-${f.attribute}`}
                   sx={{
-                    bgcolor: "background.paper",
                     width: f.width,
                   }}
                 >
@@ -143,11 +114,6 @@ export const UserTable = <T extends Record<string, any>>({
           ))}
         </TableBody>
       </Table>
-      {variant === "pagination" && pagination && (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: "0.375rem" }}>
-          <Pagination count={pagination.count} page={pagination.currentPage} color="primary" />
-        </Box>
-      )}
     </TableContainer>
   )
 }
