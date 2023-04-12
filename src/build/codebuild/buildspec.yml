@@ -1,0 +1,24 @@
+version: 0.2
+env:
+  shell: bash
+  secrets-manager:
+    DOCKER_USERNAME: kaiyo-notification:DOCKER_USERNAME
+    DOCKER_PASSWORD: kaiyo-notification:DOCKER_PASSWORD
+    AWS_ACCOUNT_ID: kaiyo-notification:AWS_ACCOUNT_ID
+    APP_ENV: kaiyo-notification:APP_ENV
+phases:
+  pre_build:
+    commands:
+      - aws --version
+      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-1.amazonaws.com
+  build:
+    commands:
+      - docker build -t kaiyo-notification/client
+        --build-arg APP_ENV=$APP_ENV
+        -f ./src/build/docker/Dockerfile .
+      - docker tag kaiyo-notification/client:latest $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-1.amazonaws.com/client:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-1.amazonaws.com/client:latest
