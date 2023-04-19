@@ -11,6 +11,7 @@ export {
   DialogContent,
   Divider,
   Drawer,
+  FormControl,
   FormControlLabel,
   FormGroup,
   Grid,

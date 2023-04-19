@@ -167,6 +167,7 @@
     "date": "日付",
     "breakfast": "朝食",
     "lunch": "昼食",
+    "dinner": "夕食",
     "dinner_a": "夕食(A)",
     "dinner_b": "夕食(B)",
     "dinner_c": "夕食(C)",
@@ -176,7 +177,21 @@
     "lipid": "脂質",
     "salt": "塩分",
     "check_detail": "詳細を確認する",
-    "detail": "詳細確認"
+    "detail": "詳細確認", 
+    "total_amount": "当月合計金額",
+    "yen": "円",
+    "morning": "朝",
+    "noon": "昼",
+    "evening": "夕",
+    "meal_edit": "喫食編集",
+    "reflect": "反映する",
+    "affiliation": "所属",
+    "start_date": "期間(開始)",
+    "end_date": "期間(終了)",
+    "target_number": "対象人数",
+    "confirm_modal": "確定しますか？",
+    "edit_modal": "編集して上書きしますか？",
+    "warning_modal": "現在から3日前までのデータのみ変更可能です"
   },
   "errors": {}
 }

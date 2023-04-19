@@ -7,7 +7,6 @@ export const SessionContext = createContext<ISessionState | null>(null)
 export const FetchSession: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const [value, setValue] = useState<ISession>({ id: "" })
   const data = localStorage.getItem("auth" || "")
-
   useEffect(() => {
     if (data) {
       setValue(JSON.parse(data) as ISession)

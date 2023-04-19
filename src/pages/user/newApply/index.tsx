@@ -1,7 +1,18 @@
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Box, Button, Divider, MenuItem, Select, TextField, Typography } from "src/UILibrary"
+import {
+  AdapterDateFns,
+  Box,
+  Button,
+  DatePicker,
+  Divider,
+  LocalizationProvider,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "src/UILibrary"
 import { InputField } from "./components/field/inputField"
 import { ConfirmModal } from "./components/modal/confirmModal"
 import { SendModal } from "./components/modal/sendModal"
@@ -11,6 +22,7 @@ import { CategoryType } from "src/types/application"
 
 export const NewApply: React.FC = () => {
   const { t } = useTranslation()
+  const [departureDate, setDepartureDate] = useState<string | null>()
   const [sendModalOpen, setSendModalOpen] = useState<boolean>(false)
   const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false)
 
@@ -62,7 +74,16 @@ export const NewApply: React.FC = () => {
           </Box>
           <Box flexDirection="column" sx={{ display: "flex", gap: "0.5rem" }}>
             <InputField label={t("application.departure_time")}>
-              <TextField sx={{ width: "50%" }} />
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  value={departureDate}
+                  onChange={(value) => setDepartureDate(value)}
+                  inputFormat="yyyy/MM/dd"
+                  renderInput={(params) => (
+                    <TextField fullWidth sx={{ width: "50%" }} {...params} />
+                  )}
+                />
+              </LocalizationProvider>
               <TextField sx={{ width: "48%", ml: "0.3rem" }} />
             </InputField>
             <InputField label={t("application.departure_companion")}>
@@ -71,7 +92,16 @@ export const NewApply: React.FC = () => {
           </Box>
           <Box flexDirection="column" sx={{ display: "flex", gap: "0.5rem" }}>
             <InputField label={t("application.return_time")}>
-              <TextField sx={{ width: "50%" }} />
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  value={departureDate}
+                  onChange={(value) => setDepartureDate(value)}
+                  inputFormat="yyyy/MM/dd"
+                  renderInput={(params) => (
+                    <TextField fullWidth sx={{ width: "50%" }} {...params} />
+                  )}
+                />
+              </LocalizationProvider>
               <TextField sx={{ width: "48%", ml: "0.3rem" }} />
             </InputField>
             <InputField label={t("application.return_companion")}>

@@ -5,11 +5,11 @@ import { Box, Typography } from "src/UILibrary"
 //import { PAGE_SIZE } from "src/constants/common"
 import { FieldDefinition, MealTable } from "src/components/mealTable"
 import { DateType } from "./components/dateType"
+import { MealDetailModal } from "../mealDetail"
 
 import { MOCK_MEAL_DATA } from "./mockmeal"
 import { Meal } from "src/types/meal"
-import { MealDetailModal } from "./components/mealDetail"
-import { MOCK_MEAL_DETAIL_DATA } from "./components/mockMedalDetail"
+import { MOCK_MEAL_DETAIL_DATA } from "../mealDetail/mockMedalDetail"
 
 const mealData: Meal[] = MOCK_MEAL_DATA
 
