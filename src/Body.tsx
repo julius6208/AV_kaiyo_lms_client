@@ -8,13 +8,15 @@ import { MyPage as TeacherMyPage } from "src/pages/teacher/myPage"
 import { TeacherApplication } from "src/pages/teacher/applicationList"
 import { StudentList } from "src/pages/teacher/student"
 import { ParentList } from "src/pages/teacher/parent"
+import { MealManagement } from "./pages/teacher/mealManagement"
+import { MealChoice } from "./pages/teacher/mealChoice"
+import { StaffList } from "./pages/teacher/staff"
 import { UserApplication } from "src/pages/user/applicationList"
 import { UserApplicationDetail } from "./pages/user/applicationDetail"
 import { NewApply } from "src/pages/user/newApply"
+import { MealList } from "./pages/user/mealList"
 
 import { FetchSession } from "src/modules/sessionProvider"
-import { StaffList } from "./pages/teacher/staff"
-import { MealList } from "./pages/user/mealList"
 
 export function Body() {
   return (
@@ -34,6 +36,8 @@ export function Body() {
           <Route path="/teacher/students" element={<StudentList />} />
           <Route path="/teacher/parents" element={<ParentList />} />
           <Route path="/teacher/staffs" element={<StaffList />} />
+          <Route path="/teacher/meal-management" element={<MealManagement />} />
+          <Route path="/teacher/meal-choice" element={<MealChoice />} />
           <Route path="/application" element={<UserApplication />} />
           <Route path="/application/:id" element={<UserApplicationDetail />} />
           <Route path="/application/new" element={<NewApply />} />

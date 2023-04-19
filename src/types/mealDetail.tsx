@@ -1,4 +1,5 @@
 export interface MealDetail {
+  id: number
   menu_name: string
   energy: string
   protein: string

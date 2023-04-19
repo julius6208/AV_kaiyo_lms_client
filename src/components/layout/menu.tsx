@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import type { FC, MouseEvent, PropsWithChildren } from "react"
 import { useTranslation } from "react-i18next"
-import { To, useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 import {
   AppBar,
@@ -27,13 +27,35 @@ import LogoImage from "src/assets/imgs/logo_white.png"
 import { ReactComponent as HamburgerIcon } from "src/assets/icons/hamburger.svg"
 
 import { useSession } from "src/modules/sessionProvider"
+import { Label } from "src/types/menu"
 
 export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const [menus, setMenus] = useState<any>()
+  const [menus, setMenus] = useState<Label[]>([
+    {
+      icon: UserIcon,
+      label: "menu.my_page",
+      path: "/my-page",
+    },
+    {
+      label: "menu.from_parent",
+      icon: UsersIcon,
+      path: "/application",
+    },
+    {
+      label: "menu.meal",
+      icon: MealIcon,
+      path: "/meal-list",
+    },
+    {
+      label: "menu.pdf_transfer",
+      icon: BuildingIcon,
+      path: "/pdf-transfer",
+    },
+  ])
 
   const onOpenMobileMenu = (e: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget)
@@ -86,7 +108,7 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
             },
             {
               label: "menu.meal_choices",
-              path: "/teacher/meal-choices",
+              path: "/teacher/meal-choice",
             },
           ],
         },
@@ -144,44 +166,39 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
       ])
     }
   }, [session])
-
   const menuContent = (
     <List>
-      {menus?.map(
-        (
-          m: { subMenu: any[]; icon: string; label: any; path: To },
-          i: React.Key | null | undefined
-        ) =>
-          m.subMenu ? (
-            <ExpandableList
-              key={i}
-              subMenu={
-                <List disablePadding>
-                  {m.subMenu.map((s, j) => (
-                    <ListItemButton key={`${i}-${j}`} onClick={() => navigate(s.path)}>
-                      <ListItemText primary={t(s.label)} />
-                    </ListItemButton>
-                  ))}
-                </List>
-              }
-            >
-              <ListItemIcon>
-                <Image src={m.icon} />
-              </ListItemIcon>
-              <ListItemText primary={t(m.label)} />
-            </ExpandableList>
-          ) : (
-            <ListItemButton
-              key={i}
-              selected={location.pathname === m.path}
-              onClick={() => navigate(m.path)}
-            >
-              <ListItemIcon>
-                <Image src={m.icon} />
-              </ListItemIcon>
-              <ListItemText primary={t(m.label)} />
-            </ListItemButton>
-          )
+      {menus?.map((m, i) =>
+        m.subMenu ? (
+          <ExpandableList
+            key={i}
+            subMenu={
+              <List disablePadding>
+                {m.subMenu.map((s, j) => (
+                  <ListItemButton key={`${i}-${j}`} onClick={() => navigate(s.path as string)}>
+                    <ListItemText primary={t(s.label)} />
+                  </ListItemButton>
+                ))}
+              </List>
+            }
+          >
+            <ListItemIcon>
+              <Image src={m.icon as string} />
+            </ListItemIcon>
+            <ListItemText primary={t(m.label)} />
+          </ExpandableList>
+        ) : (
+          <ListItemButton
+            key={i}
+            selected={location.pathname === m.path}
+            onClick={() => navigate(m.path as string)}
+          >
+            <ListItemIcon>
+              <Image src={m.icon as string} />
+            </ListItemIcon>
+            <ListItemText primary={t(m.label)} />
+          </ListItemButton>
+        )
       )}
     </List>
   )

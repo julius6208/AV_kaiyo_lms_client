@@ -12,6 +12,7 @@ import {
   Typography,
   Pagination,
 } from "src/UILibrary"
+import { useSession } from "src/modules/sessionProvider"
 
 export interface FieldDefinition<T> {
   attribute: string
@@ -52,6 +53,7 @@ export const MealTable = <T extends Record<string, any>>({
   onDetail,
 }: AdvancedTableParams<T>) => {
   const { t } = useTranslation()
+  const session = useSession()
   const handleDetail = () => {
     onDetail && onDetail(true)
   }
@@ -137,7 +139,21 @@ export const MealTable = <T extends Record<string, any>>({
                         {getProperty(row, f.attribute)}
                       </Typography.Action>
                     )}
-                    {index !== 0 && (
+                    {session?.value.id === "teacher" && index !== 0 && index !== 1 && (
+                      <Typography.Detail
+                        onClick={handleDetail}
+                        sx={{
+                          width: "100%",
+                          cursor: "pointer",
+                          fontSize: "10px",
+                          color: "secondary.dark",
+                          lineHeight: "0.625rem",
+                        }}
+                      >
+                        {t("meal.check_detail")}
+                      </Typography.Detail>
+                    )}
+                    {session?.value.id !== "teacher" && index !== 0 && (
                       <Typography.Detail
                         onClick={handleDetail}
                         sx={{

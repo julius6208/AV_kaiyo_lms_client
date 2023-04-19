@@ -27,6 +27,7 @@ export const ResetPassword: React.FC = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        mx: "2rem",
       }}
     >
       <Box sx={{ width: 400, display: "flex", alignItems: "center", flexDirection: "column" }}>
