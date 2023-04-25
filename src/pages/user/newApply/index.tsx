@@ -19,12 +19,15 @@ import { SendModal } from "./components/modal/sendModal"
 
 import { CATEGORY_TYPES } from "src/constants/categoryType"
 import { CategoryType } from "src/types/application"
+import { COMPOINION_LIST } from "src/constants/componion"
 
 export const NewApply: React.FC = () => {
   const { t } = useTranslation()
   const [departureDate, setDepartureDate] = useState<string | null>()
   const [sendModalOpen, setSendModalOpen] = useState<boolean>(false)
   const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false)
+  const [departureCompanion, setDepartureCompanion] = useState<string>("none")
+  const [returnCompanion, setReturnCompanion] = useState<string>("none")
 
   return (
     <Box
@@ -84,10 +87,34 @@ export const NewApply: React.FC = () => {
                   )}
                 />
               </LocalizationProvider>
-              <TextField sx={{ width: "48%", ml: "0.3rem" }} />
             </InputField>
             <InputField label={t("application.departure_companion")}>
-              <TextField sx={{ width: "50%" }} />
+              <Select
+                fullWidth
+                sx={{
+                  width: "50%",
+                  "& .MuiSelect-select": {
+                    bgcolor: "background.default",
+                  },
+                }}
+                value={departureCompanion}
+                onChange={(event) => setDepartureCompanion(event.target.value as string)}
+              >
+                {COMPOINION_LIST.map((companion) => (
+                  <MenuItem key={companion.key} value={companion.key}>
+                    {t(companion.label)}
+                  </MenuItem>
+                ))}
+              </Select>
+              {(departureCompanion === "brother_sister" ||
+                departureCompanion === "relative" ||
+                departureCompanion === "staff" ||
+                departureCompanion === "other") && (
+                <TextField
+                  sx={{ width: "48%", ml: "0.3rem" }}
+                  placeholder={t("application.enter_companion")}
+                />
+              )}
             </InputField>
           </Box>
           <Box flexDirection="column" sx={{ display: "flex", gap: "0.5rem" }}>
@@ -102,10 +129,34 @@ export const NewApply: React.FC = () => {
                   )}
                 />
               </LocalizationProvider>
-              <TextField sx={{ width: "48%", ml: "0.3rem" }} />
             </InputField>
             <InputField label={t("application.return_companion")}>
-              <TextField sx={{ width: "50%" }} />
+              <Select
+                fullWidth
+                sx={{
+                  width: "50%",
+                  "& .MuiSelect-select": {
+                    bgcolor: "background.default",
+                  },
+                }}
+                value={returnCompanion}
+                onChange={(event) => setReturnCompanion(event.target.value as string)}
+              >
+                {COMPOINION_LIST.map((companion) => (
+                  <MenuItem key={companion.key} value={companion.key}>
+                    {t(companion.label)}
+                  </MenuItem>
+                ))}
+              </Select>
+              {(returnCompanion === "brother_sister" ||
+                returnCompanion === "relative" ||
+                returnCompanion === "staff" ||
+                returnCompanion === "other") && (
+                <TextField
+                  sx={{ width: "48%", ml: "0.3rem" }}
+                  placeholder={t("application.enter_companion")}
+                />
+              )}
             </InputField>
           </Box>
           <Box>

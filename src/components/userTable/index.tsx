@@ -95,20 +95,17 @@ export const UserTable = <T extends Record<string, any>>({
               sx={{
                 cursor: "pointer",
                 "&>td": {
-                  borderWidth: 0,
                   textAlign: "center",
                   p: "0.625rem 0.5rem",
                   color: "text.secondary",
                   "&:first-of-type": {
                     color: "secondary.dark",
                   },
-                  "&:not(:last-of-type)": {
-                    borderWidth: "0 2px 2px 0",
-                    borderStyle: "solid",
-                    borderColor: "info.light",
-                    borderRightWidth: "2px",
-                    borderLeftWidth: "2px",
-                  },
+                  borderWidth: "0 2px 2px 0",
+                  borderStyle: "solid",
+                  borderColor: "info.light",
+                  borderRightWidth: "2px",
+                  borderLeftWidth: "2px",
                 },
               }}
             >

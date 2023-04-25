@@ -15,6 +15,8 @@ import { UserApplication } from "src/pages/user/applicationList"
 import { UserApplicationDetail } from "./pages/user/applicationDetail"
 import { NewApply } from "src/pages/user/newApply"
 import { MealList } from "./pages/user/mealList"
+import { MealExpense } from "./pages/mealMaker/mealExpense"
+import { MealData } from "./pages/mealMaker/mealData"
 
 import { FetchSession } from "src/modules/sessionProvider"
 
@@ -42,6 +44,8 @@ export function Body() {
           <Route path="/application/:id" element={<UserApplicationDetail />} />
           <Route path="/application/new" element={<NewApply />} />
           <Route path="/meal-list" element={<MealList />} />
+          <Route path="/meal/meal-data" element={<MealData />} />
+          <Route path="/meal/meal-expense" element={<MealExpense />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ResetPassword />} />

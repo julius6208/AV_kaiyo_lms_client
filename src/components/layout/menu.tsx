@@ -164,6 +164,23 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
           path: "/pdf-transfer",
         },
       ])
+    } else if (session?.value.id === "meal") {
+      setMenus([
+        {
+          label: "menu.meal",
+          icon: MealIcon,
+          subMenu: [
+            {
+              label: "menu.eating_management",
+              path: "/meal/meal-data",
+            },
+            {
+              label: "menu.eating_expense",
+              path: "/meal/meal-expense",
+            },
+          ],
+        },
+      ])
     }
   }, [session])
   const menuContent = (

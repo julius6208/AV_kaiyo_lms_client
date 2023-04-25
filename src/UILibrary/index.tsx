@@ -41,6 +41,7 @@ export { type SvgIconTypeMap, type SelectChangeEvent } from "@mui/material"
 
 export {
   Download as DownloadIcon,
+  Upload as UploadIcon,
   ExpandLess as ExpandLessIcon,
   ExpandMore as ExpandMoreIcon,
   KeyboardDoubleArrowUp as KeyboardDoubleArrowUpIcon,
@@ -51,6 +52,9 @@ export {
 export { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 export { LocalizationProvider, DatePicker } from "@mui/x-date-pickers"
 export { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+
+export { DropzoneArea, DropzoneAreaBase } from "react-mui-dropzone"
+export { type FileObject } from "react-mui-dropzone"
 
 export { Button } from "./button"
 export { ExpandableList } from "./expandableList"
