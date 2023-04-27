@@ -48,30 +48,36 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
       </Box>
       <Divider sx={{ borderColor: "text.primary", width: "100%", mt: "1rem" }} />
       <Box sx={{ mt: "2.5rem" }}>
-        <Grid container>
-          <Grid container spacing={2} item sm={4}>
+        <Grid container rowSpacing={2}>
+          <Grid container spacing={1} item sm={5}>
             <InputField label={t("application.category")}>
               <Typography.Description>{`: ${application?.category}`}</Typography.Description>
             </InputField>
-            <InputField label={t("application.charge")}>
-              <Typography.Description>{`: ${application?.hm}`}</Typography.Description>
+            <InputField label={t("application.student_number")}>
+              <Typography.Description>: 1111111</Typography.Description>
             </InputField>
-            <InputField label="ID">
-              <Typography.Description>{`: ${application?.id}`}</Typography.Description>
-            </InputField>
-            <InputField label={t("application.student")}>
+            <InputField label={t("application.student_name")}>
               <Typography.Description>{`: ${application?.student}`}</Typography.Description>
             </InputField>
-            <InputField label={t("application.parent")}>
-              <Typography.Description>{`: ${application?.student}`}</Typography.Description>
+            <InputField label={t("application.departure_time")}>
+              <Typography.Description>: 3月7日 午前10時</Typography.Description>
+            </InputField>
+            <InputField label={t("application.departure_companion")}>
+              <Typography.Description>: 吉岡美波</Typography.Description>
+            </InputField>
+            <InputField label={t("application.return_time")}>
+              <Typography.Description>: 3月7日 午前10時</Typography.Description>
+            </InputField>
+            <InputField label={t("application.return_companion")}>
+              <Typography.Description>: 吉岡美波</Typography.Description>
             </InputField>
           </Grid>
-          <Grid item sm={8}>
+          <Grid item sm={7} sx={{ pl: "0.6rem" }}>
             <Box sx={{ mb: "0.875rem" }}>
               <Typography.Description>{t("application.reason")}</Typography.Description>
             </Box>
             <TextField
-              rows={5}
+              rows={6}
               id="outlined-multiline-static"
               multiline
               value={application?.reason}
@@ -84,7 +90,7 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
                   },
                 },
                 "& textarea": {
-                  width: { md: "420px", xs: "200px" },
+                  width: { md: "351px", xs: "200px" },
                 },
               }}
             />
