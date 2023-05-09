@@ -131,7 +131,7 @@ export const MealDetailModal: React.FC<ApplicationModalProps> = ({
             <DownloadIcon sx={{ width: "20px", height: "20px" }} />
           </Button>
         </Box>
-        <UserTable fields={fields} content={staffMealDetail} />
+        <UserTable fields={fields} content={staffMealDetail} sortBy="" sortOrder="" />
         <Box sx={{ mt: "2rem", display: "flex", alignItems: "center" }}>
           <Box sx={{ flex: 2, bgcolor: "text.secondary", py: "0.625rem" }}>
             <Typography.Detail

@@ -6,12 +6,15 @@ import { SortIcon } from "./sortIcon"
 
 import { useSession } from "src/modules/sessionProvider"
 
-// interface ApplicationTableHeaderProps {
-//   sortBy: string
-//   sortOrder: string
-// }
+interface ApplicationTableHeaderProps {
+  sortBy: string
+  sortOrder: string
+}
 
-export const ApplicationTableHeader: React.FC = () => {
+export const ApplicationTableHeader: React.FC<ApplicationTableHeaderProps> = ({
+  sortBy,
+  sortOrder,
+}) => {
   const { t } = useTranslation()
   const session = useSession()
 
@@ -47,7 +50,7 @@ export const ApplicationTableHeader: React.FC = () => {
               {t("application.registration_number")}
             </Typography.Title>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon />
+              <SortIcon fieldName="id" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>
@@ -57,7 +60,7 @@ export const ApplicationTableHeader: React.FC = () => {
               {t("application.student")}
             </Typography.Title>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon />
+              <SortIcon fieldName="student" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>
@@ -67,7 +70,7 @@ export const ApplicationTableHeader: React.FC = () => {
               {t("application.charge")}
             </Typography.Title>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon />
+              <SortIcon fieldName="hm" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>
@@ -80,7 +83,7 @@ export const ApplicationTableHeader: React.FC = () => {
               {t("application.category")}
             </Typography.Title>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon />
+              <SortIcon fieldName="category" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>
@@ -195,7 +198,7 @@ export const ApplicationTableHeader: React.FC = () => {
               {t("application.application_time")}
             </Typography.Detail>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon />
+              <SortIcon fieldName="applicationtime" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>
@@ -205,7 +208,7 @@ export const ApplicationTableHeader: React.FC = () => {
               {t("application.departure_time")}
             </Typography.Detail>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon />
+              <SortIcon fieldName="leavetime" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>
@@ -215,7 +218,7 @@ export const ApplicationTableHeader: React.FC = () => {
               {t("application.return_time")}
             </Typography.Detail>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon />
+              <SortIcon fieldName="returntime" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>

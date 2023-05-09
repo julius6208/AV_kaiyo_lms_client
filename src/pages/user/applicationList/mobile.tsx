@@ -122,6 +122,8 @@ export const UserApplication: React.FC = () => {
         <ApplicationListTable
           applicationData={applicationData}
           pagination={{ count: 10, currentPage: 1 }}
+          sortBy=""
+          sortOrder=""
         />
       </Box>
     </Box>

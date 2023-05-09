@@ -17,6 +17,8 @@ interface ApplicationTableProps {
     count: number
     currentPage: number
   }
+  sortBy: string
+  sortOrder: string
 }
 
 export const ApplicationListTable: React.FC<ApplicationTableProps> = ({
@@ -24,6 +26,8 @@ export const ApplicationListTable: React.FC<ApplicationTableProps> = ({
   onEdit,
   setApplications,
   pagination,
+  sortBy,
+  sortOrder,
 }) => {
   const handleChecked = (id: number, value: boolean) => {
     setApplications &&
@@ -40,7 +44,7 @@ export const ApplicationListTable: React.FC<ApplicationTableProps> = ({
         mobile={
           <>
             <Table size="small" sx={{ tableLayout: "fixed" }}>
-              <MobileApplicationTableHeader />
+              <MobileApplicationTableHeader sortBy={sortBy} sortOrder={sortOrder} />
               <TableBody>
                 {applicationData.map((row) => (
                   <MobileApplicationTableItem
@@ -58,7 +62,7 @@ export const ApplicationListTable: React.FC<ApplicationTableProps> = ({
         laptop={
           <>
             <Table size="small" sx={{ tableLayout: "fixed" }}>
-              <DesktopApplicationTableHeader />
+              <DesktopApplicationTableHeader sortBy={sortBy} sortOrder={sortOrder} />
               <TableBody>
                 {applicationData.map((row) => (
                   <DesktopApplicationTableItem

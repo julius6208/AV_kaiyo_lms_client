@@ -1,31 +1,29 @@
-export interface Parent {
+export interface Teacher {
   user_id: number
   fullName: string
   fullNameKana: string
+  type: string
   phone1: string
   phone2: string
-  enrolledStudents: string
-  postCode: string
-  address: string
 }
 
-export interface IParentResponse {
-  parents: Parent[]
+export interface ITeacherResponse {
+  teachers: Teacher[]
   total: number
 }
 
-export interface IParentSorts {
+export interface ITeacherSorts {
   sort: string
   ids: string
   fullName: string
   fullNameKana: string
-  address: string
+  types: string
 }
 
-export interface IParentListFilters {
+export interface ITeacherListFilters {
   sort: string
   ids: string
   fullName: string
   fullNameKana: string
-  address: string
+  types: string
 }

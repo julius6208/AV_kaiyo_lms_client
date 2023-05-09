@@ -40,8 +40,9 @@ export const ApproveModal: React.FC<ApplicationModalProps> = ({
                 index + 1
               }件目`}</Typography.Description>
               <Typography.Description sx={{ ml: "3.5rem" }}>
-                {`${t("application.register_number")}${item.id}`}
+                {`${t("application.registration_number")}`}
               </Typography.Description>
+              <Typography.Description>{`: ${item.id}`}</Typography.Description>
             </Box>
           ))}
         </Stack>

@@ -1,39 +1,57 @@
 import React from "react"
 import {
   UnfoldMoreIcon,
-  // KeyboardDoubleArrowDownIcon,
-  // KeyboardDoubleArrowUpIcon,
+  KeyboardDoubleArrowDownIcon,
+  KeyboardDoubleArrowUpIcon,
 } from "src/UILibrary"
 
-// interface SortIconProps {
-//   fieldNo: string
-//   sortBy: string
-//   sortOrder: string
-// }
+interface SortIconProps {
+  fieldName?: string
+  sortBy?: string
+  sortOrder?: string
+}
 
-export const SortIcon: React.FC = () => {
+export const SortIcon: React.FC<SortIconProps> = ({ fieldName, sortBy, sortOrder }) => {
   return (
     <>
-      {/* {sortBy === fieldNo ? (
+      {sortBy === fieldName ? (
         <>
-          {sortOrder === "asc" ? (
-            <KeyboardDoubleArrowUpIcon sx={{ width: "16px", height: "16px", mr: "0.125rem" }} />
+          {sortOrder === "desc" ? (
+            <KeyboardDoubleArrowUpIcon
+              sx={{
+                width: "20px",
+                height: "20px",
+                cursor: "pointer",
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+              }}
+            />
           ) : (
-            <KeyboardDoubleArrowDownIcon sx={{ width: "16px", height: "16px", mr: "0.125rem" }} />
+            <KeyboardDoubleArrowDownIcon
+              sx={{
+                width: "20px",
+                height: "20px",
+                cursor: "pointer",
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+              }}
+            />
           )}
         </>
-      ) : ( */}
-      <UnfoldMoreIcon
-        sx={{
-          width: "20px",
-          height: "20px",
-          cursor: "pointer",
-          position: "absolute",
-          bottom: 0,
-          right: 0,
-        }}
-      />
-      {/* )} */}
+      ) : (
+        <UnfoldMoreIcon
+          sx={{
+            width: "20px",
+            height: "20px",
+            cursor: "pointer",
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+          }}
+        />
+      )}
     </>
   )
 }

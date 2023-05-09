@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
 import {
@@ -11,28 +12,30 @@ import {
   Typography,
 } from "src/UILibrary"
 import { UserTable, FieldDefinition } from "src/components/userTable"
-
-import { Parent } from "src/types/parent"
-import { PAGE_SIZE } from "src/constants/common"
-import { MOCK_PARENT_DATA } from "./mockparent"
 import { SearchBox } from "./components/searchBox"
 
-const parentData: Parent[] = MOCK_PARENT_DATA
+import { PAGE_SIZE } from "src/constants/common"
+import { IParentListFilters, IParentSorts, Parent } from "src/types/parent"
+import { getOptimizedParentListFilters } from "src/modules/filters"
+import { useGetExportParentList, useGetParentList } from "src/queries/parent"
+import { CSVLink } from "react-csv"
 
 const fields: FieldDefinition<Parent>[] = [
   {
-    attribute: "id",
+    attribute: "user_id",
+    sort_field: "user_id",
     label: "login.id",
     width: 50,
     sort: true,
   },
   {
-    attribute: "name",
+    attribute: "fullName",
     label: "mypage.name",
     width: 90,
   },
   {
-    attribute: "hiragana",
+    attribute: "fullNameKana",
+    sort_field: "full_name_katakana",
     label: "mypage.furigana",
     width: 100,
     sort: true,
@@ -48,12 +51,13 @@ const fields: FieldDefinition<Parent>[] = [
     width: 90,
   },
   {
-    attribute: "enrolled_sibling",
-    label: "user_list.enrolled_sibling",
+    attribute: "enrolledStudents",
+    label: "user_list.enrolled_student",
     width: 90,
   },
   {
-    attribute: "post_number",
+    attribute: "postCode",
+    sort_field: "post_code",
     label: "mypage.postal_code",
     width: 90,
     sort: true,
@@ -67,7 +71,83 @@ const fields: FieldDefinition<Parent>[] = [
 
 export const ParentList: React.FC = () => {
   const { t } = useTranslation()
+  const [page, setPage] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number>(1)
   const [displayCount, setDisplayCount] = useState<number>(PAGE_SIZE[0])
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const sort = searchParams.get("sort") || ""
+  const sortBy = sort.split(",")[0]
+  const sortOrder = sort.split(",")[1]
+  const ids = searchParams.get("ids") || ""
+  const fullName = searchParams.get("fullName") || ""
+  const fullNameKana = searchParams.get("fullNameKana") || ""
+  const address = searchParams.get("address") || ""
+
+  const {
+    data: parentData,
+    isLoading,
+    error,
+  } = useGetParentList(page, displayCount, "", sort, ids, fullName, fullNameKana, address)
+
+  const { data: parentExportData } = useGetExportParentList("")
+
+  const handleSearchParams = (
+    sortBy: string,
+    sortOrder: string,
+    ids: string,
+    fullName: string,
+    fullNameKana: string,
+    address: string
+  ) => {
+    const newSearchParam: Partial<IParentSorts> = {}
+    newSearchParam.sort = sortBy + "," + sortOrder
+    if (ids) {
+      newSearchParam.ids = ids
+    }
+    if (fullName) {
+      newSearchParam.fullName = fullName
+    }
+    if (fullNameKana) {
+      newSearchParam.fullNameKana = fullNameKana
+    }
+    if (address) {
+      newSearchParam.address = address
+    }
+    setSearchParams(newSearchParam, { replace: true })
+  }
+
+  const handleSort = (fieldName: string) => {
+    const newSortOrder =
+      fieldName === sortBy
+        ? sortOrder === "asc"
+          ? "desc"
+          : "asc"
+        : fieldName === ""
+        ? "desc"
+        : "asc"
+    handleSearchParams(fieldName, newSortOrder, ids, fullName, fullNameKana, address)
+  }
+
+  const handleFilterChange = (data: IParentListFilters) => {
+    const newSearchParam = getOptimizedParentListFilters(data)
+    setSearchParams(
+      Object.keys(newSearchParam).reduce(
+        (prev, curr) => ({
+          ...prev,
+          [curr]: newSearchParam[curr as keyof IParentListFilters]?.toString(),
+        }),
+        {}
+      ),
+      { replace: true }
+    )
+  }
+
+  useEffect(() => {
+    if (parentData) {
+      setTotalPages(Math.ceil(parentData.data.total / displayCount))
+    }
+  }, [displayCount, parentData])
 
   return (
     <Box
@@ -93,7 +173,16 @@ export const ParentList: React.FC = () => {
           }}
         >
           <Box>
-            <SearchBox />
+            <SearchBox
+              initialData={{
+                sort,
+                ids,
+                fullName,
+                fullNameKana,
+                address,
+              }}
+              handleFilterChange={handleFilterChange}
+            />
             <Box
               sx={{
                 display: "flex",
@@ -103,7 +192,11 @@ export const ParentList: React.FC = () => {
                 gap: "1.125rem",
               }}
             >
-              <Typography.Detail>1~50/500</Typography.Detail>
+              <Typography.Detail>{`${
+                !parentData?.data.parents.length ? 0 : displayCount * (page - 1) + 1
+              }~${!parentData?.data.parents.length ? 0 : parentData?.data.parents.length} / ${
+                !parentData?.data.total ? 0 : parentData?.data.total
+              }`}</Typography.Detail>
               <Typography.Detail>{t("application.display_count")}</Typography.Detail>
               <Select
                 value={displayCount}
@@ -125,33 +218,41 @@ export const ParentList: React.FC = () => {
               </Select>
             </Box>
           </Box>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "info.contrastText",
-              borderRadius: "0.1875rem",
-              mt: "3.125rem",
-              p: "0.5625rem 2rem",
-            }}
-          >
-            <Typography.Title
+          <CSVLink data={parentExportData?.data || ""} filename="parent.csv">
+            <Button
+              variant="contained"
               sx={{
-                fontWeight: 500,
-                fontSize: "14px",
-                textAlign: "center",
-                lineHeight: "0.875rem",
-                mr: "1rem",
+                backgroundColor: "info.contrastText",
+                borderRadius: "0.1875rem",
+                mt: "3.125rem",
+                p: "0.5625rem 2rem",
               }}
             >
-              {t("user_list.csv_download")}
-            </Typography.Title>
-            <DownloadIcon sx={{ width: "20px", height: "20px" }} />
-          </Button>
+              <Typography.Title
+                sx={{
+                  fontWeight: 500,
+                  fontSize: "14px",
+                  textAlign: "center",
+                  lineHeight: "0.875rem",
+                  mr: "1rem",
+                }}
+              >
+                {t("user_list.csv_download")}
+              </Typography.Title>
+              <DownloadIcon sx={{ width: "20px", height: "20px" }} />
+            </Button>
+          </CSVLink>
         </Box>
         <UserTable
           fields={fields}
-          content={parentData}
-          pagination={{ count: 10, currentPage: 1 }}
+          content={parentData?.data.parents || []}
+          onPageNumChange={setPage}
+          pagination={{ count: totalPages, currentPage: page }}
+          isLoading={isLoading}
+          error={error?.message}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          handleSort={handleSort}
         />
       </Box>
     </Box>

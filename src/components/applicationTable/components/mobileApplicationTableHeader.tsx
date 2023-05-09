@@ -4,12 +4,15 @@ import { useTranslation } from "react-i18next"
 import { Box, TableCell, TableHead, TableRow, Typography } from "src/UILibrary"
 import { SortIcon } from "./sortIcon"
 
-// interface ApplicationTableHeaderProps {
-//   sortBy: string
-//   sortOrder: string
-// }
+interface ApplicationTableHeaderProps {
+  sortBy: string
+  sortOrder: string
+}
 
-export const ApplicationTableHeader: React.FC = () => {
+export const ApplicationTableHeader: React.FC<ApplicationTableHeaderProps> = ({
+  sortBy,
+  sortOrder,
+}) => {
   const { t } = useTranslation()
   return (
     <TableHead>
@@ -39,7 +42,7 @@ export const ApplicationTableHeader: React.FC = () => {
           <Box sx={{ cursor: "pointer" }}>
             <Typography.Detail>{t("application.registration_number")}</Typography.Detail>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon />
+              <SortIcon fieldName="id" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>
@@ -47,7 +50,7 @@ export const ApplicationTableHeader: React.FC = () => {
           <Box sx={{ cursor: "pointer" }}>
             <Typography.Detail>{t("application.student")}</Typography.Detail>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon />
+              <SortIcon fieldName="student" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>
@@ -55,7 +58,7 @@ export const ApplicationTableHeader: React.FC = () => {
           <Box sx={{ cursor: "pointer" }}>
             <Typography.Detail>{t("application.application_time")}</Typography.Detail>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon />
+              <SortIcon fieldName="applicationtime" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>
