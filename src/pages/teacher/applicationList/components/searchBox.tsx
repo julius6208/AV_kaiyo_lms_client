@@ -78,7 +78,7 @@ export const SearchBox: React.FC = () => {
         >
           <Grid container>
             <Grid item sm={3}>
-              <Typography.Action>{t("application.registration_number")}</Typography.Action>
+              <Typography.Action>{t("application.name")}</Typography.Action>
               <TextField sx={{ width: "100px" }} />
             </Grid>
             <Grid item sm={6}>

@@ -1,18 +1,53 @@
 export interface Student {
-  id: number
-  name: string
-  hiragana: string
-  birth: string
+  user_id: number
+  fullName: string
+  fullNameKana: string
+  birthday: string
   phone: string
-  post_number: string
+  postCode: string
   address: string
   grade: number
-  class: number
-  attend_number: number
-  house: string
-  extra_activity: string
+  learningG: number
+  attendanceNumber: number
+  dormitory: string
+  club_name: string
   curriculum: string
-  enrolled_sibling: string
-  parent: string
+  enrolledSiblings: string
+  parent_name: string
   parent_phone: string
+}
+
+export interface IStudentResponse {
+  students: Student[]
+  total: number
+}
+
+export interface IStudentSorts {
+  sort: string
+  ids: string
+  fullName: string
+  fullNameKana: string
+  birthday: string
+  postCode: string
+  grade: string
+  learningG: string
+  attendanceNumber: string
+  dormitory: string
+  club_id: string
+  curriculum: string
+  enrolledSibling: string
+}
+
+export interface IStudentListFilters {
+  sort: string
+  ids: string
+  fullName: string
+  fullNameKana: string
+  birthday: string
+  grades?: string
+  learningG?: string
+  dormitory?: string
+  club_id?: string
+  curriculum: string
+  enrolledSibling: string
 }

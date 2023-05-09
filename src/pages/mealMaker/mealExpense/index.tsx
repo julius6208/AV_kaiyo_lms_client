@@ -102,6 +102,8 @@ export const MealExpense: React.FC = () => {
                 fields={fields}
                 content={mealHistoryData}
                 pagination={{ count: 10, currentPage: 1 }}
+                sortBy=""
+                sortOrder=""
               />
             </Box>
             <Box sx={{ p: "1.625rem", mt: "1.6875rem", flex: 2, bgcolor: "info.dark" }}>

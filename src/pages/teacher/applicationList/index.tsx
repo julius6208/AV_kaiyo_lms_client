@@ -144,6 +144,8 @@ export const TeacherApplication: React.FC = () => {
           onEdit={handleEdit}
           setApplications={setCheckedApplications}
           pagination={{ count: 10, currentPage: 1 }}
+          sortBy=""
+          sortOrder=""
         />
       </Box>
       <ApplicationModal
