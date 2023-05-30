@@ -1,5 +1,9 @@
 name: linter
-on: [push]
+on: 
+  push: 
+    branches:
+      - develop 
+      - main
 jobs:
   eslint:
     runs-on: ubuntu-latest
