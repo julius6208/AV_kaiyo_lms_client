@@ -34,8 +34,6 @@ function getProperty(obj: any, field: string): any {
     f === "birthday"
       ? (value = formatDate(value[f].toString(), "yyyy-MM-dd").split("."))
       : (value = value[f])
-
-    console.log(value, "field testing")
     f = attrs.shift()
   }
   return value

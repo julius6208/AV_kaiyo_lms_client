@@ -25,7 +25,7 @@ export const ApplicationTableItem: React.FC<ApplicationTableProps> = ({
   const session = useSession()
 
   const handleApplication = () => {
-    session?.value.id !== "teacher" && navigate(`/application/${content.id}`)
+    session?.value.user.role !== "teacher" && navigate(`/application/${content.id}`)
     onEdit && onEdit(content)
   }
 
@@ -117,7 +117,7 @@ export const ApplicationTableItem: React.FC<ApplicationTableProps> = ({
           </Box>
         </Box>
       </TableCell>
-      {session?.value.id === "teacher" && (
+      {session?.value.user.role === "teacher" && (
         <TableCell sx={{ display: "flex", justifyContent: "center" }}>
           <Checkbox
             sx={{ p: 0, m: 0, "& .MuiSvgIcon-root": { fontSize: "1.25rem" } }}

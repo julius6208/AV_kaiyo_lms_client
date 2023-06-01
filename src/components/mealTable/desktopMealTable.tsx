@@ -139,7 +139,7 @@ export const MealTable = <T extends Record<string, any>>({
                         {getProperty(row, f.attribute)}
                       </Typography.Action>
                     )}
-                    {session?.value.id === "teacher" && index !== 0 && index !== 1 && (
+                    {session?.value.user.role === "teacher" && index !== 0 && index !== 1 && (
                       <Typography.Detail
                         onClick={handleDetail}
                         sx={{
@@ -153,7 +153,7 @@ export const MealTable = <T extends Record<string, any>>({
                         {t("meal.check_detail")}
                       </Typography.Detail>
                     )}
-                    {session?.value.id !== "teacher" && index !== 0 && (
+                    {session?.value.user.role !== "teacher" && index !== 0 && (
                       <Typography.Detail
                         onClick={handleDetail}
                         sx={{
