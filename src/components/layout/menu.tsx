@@ -38,7 +38,7 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
     {
       icon: UserIcon,
       label: "menu.my_page",
-      path: "/my-page",
+      path: "/mypage",
     },
     {
       label: "menu.from_parent",
@@ -68,12 +68,12 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
   const session = useSession()
 
   useEffect(() => {
-    if (session?.value.id === "teacher") {
+    if (session?.value.user.role === "teacher") {
       setMenus([
         {
           icon: UserIcon,
           label: "menu.my_page",
-          path: "/my-page",
+          path: "/mypage",
         },
         {
           icon: ApplicationIcon,
@@ -118,12 +118,12 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
           path: "/teacher/pdf-transfer",
         },
       ])
-    } else if (session?.value.id === "student") {
+    } else if (session?.value.user.role === "student") {
       setMenus([
         {
           icon: UserIcon,
           label: "menu.my_page",
-          path: "/my-page",
+          path: "/mypage",
         },
         {
           label: "menu.from_student",
@@ -141,12 +141,12 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
           path: "/pdf-transfer",
         },
       ])
-    } else if (session?.value.id === "parent") {
+    } else if (session?.value.user.role === "parent") {
       setMenus([
         {
           icon: UserIcon,
           label: "menu.my_page",
-          path: "/my-page",
+          path: "/mypage",
         },
         {
           label: "menu.from_parent",
@@ -164,7 +164,7 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
           path: "/pdf-transfer",
         },
       ])
-    } else if (session?.value.id === "meal") {
+    } else if (session?.value.user.role === "meal-maker") {
       setMenus([
         {
           label: "menu.meal",

@@ -93,7 +93,7 @@ export const ApplicationTableHeader: React.FC<ApplicationTableHeaderProps> = ({
         <TableCell rowSpan={2} sx={{ width: "100px" }}>
           {t("application.approval_status")}
         </TableCell>
-        {session?.value.id === "teacher" ? (
+        {session?.value.user.role === "teacher" ? (
           <TableCell rowSpan={2}>
             <Button
               variant="outlined"

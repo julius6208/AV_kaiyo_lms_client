@@ -1,13 +1,17 @@
 import React, { useState } from "react"
 import type { FC } from "react"
+import { useNavigate } from "react-router-dom"
 import { styled, Theme, CSSObject } from "@mui/material/styles"
 import type { DrawerProps } from "@mui/material"
 import { useTranslation } from "react-i18next"
 
 import { Box, Button, Drawer, IconButton, Image, Stack } from "src/UILibrary"
+import { useSession } from "src/modules/sessionProvider"
+import { useLogout } from "src/queries/auth"
 
 import LogoImage from "src/assets/imgs/logo_white.png"
 import { ReactComponent as ArrowLeftIcon } from "src/assets/icons/arrow-left.svg"
+import { AxiosError } from "axios"
 
 const drawerWidth = 240
 
@@ -70,9 +74,22 @@ const StyledDrawer = styled(Drawer, { shouldForwardProp: (prop) => prop !== "ope
 
 export const Sidebar: FC<DrawerProps> = ({ variant = "permanent", children, ...props }) => {
   const { t } = useTranslation()
+  const session = useSession()
+  const navigate = useNavigate()
   const [opened, setOpened] = useState(true)
 
   const onToggle = () => setOpened(!opened)
+
+  const { mutate: microSoftLogout, isLoading } = useLogout({
+    onSuccess: () => {
+      session?.setValue()
+      sessionStorage.clear()
+      navigate("/")
+    },
+    onError: (err: AxiosError) => {
+      console.error(err)
+    },
+  })
 
   return (
     <StyledDrawer variant={variant} {...props} open={opened}>
@@ -110,6 +127,9 @@ export const Sidebar: FC<DrawerProps> = ({ variant = "permanent", children, ...p
             color="secondary"
             variant="contained"
             sx={{ fontWeight: 500, borderRadius: "10px" }}
+            loading={isLoading}
+            disabled={isLoading}
+            onClick={() => microSoftLogout({ code: sessionStorage.getItem("code") })}
           >
             {t("sidebar.logout")}
           </Button>

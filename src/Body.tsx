@@ -3,7 +3,6 @@ import { Route, Routes, Outlet } from "react-router-dom"
 
 import { MainLayout, MenuLayout } from "src/components/layout"
 import { Login } from "src/pages/auth/login"
-import { ResetPassword } from "src/pages/auth/resetPassword"
 import { MyPage as TeacherMyPage } from "src/pages/teacher/myPage"
 import { TeacherApplication } from "src/pages/teacher/applicationList"
 import { StudentList } from "src/pages/teacher/student"
@@ -19,6 +18,7 @@ import { MealExpense } from "./pages/mealMaker/mealExpense"
 import { MealData } from "./pages/mealMaker/mealData"
 
 import { FetchSession } from "src/modules/sessionProvider"
+import { AuthenticationLayout } from "./components/authenticationLayout"
 
 export function Body() {
   return (
@@ -33,23 +33,38 @@ export function Body() {
             </FetchSession>
           }
         >
-          <Route path="/my-page" element={<TeacherMyPage />} />
-          <Route path="/teacher/application" element={<TeacherApplication />} />
-          <Route path="/teacher/students" element={<StudentList />} />
-          <Route path="/teacher/parents" element={<ParentList />} />
-          <Route path="/teacher/staffs" element={<StaffList />} />
-          <Route path="/teacher/meal-management" element={<MealManagement />} />
-          <Route path="/teacher/meal-choice" element={<MealChoice />} />
-          <Route path="/application" element={<UserApplication />} />
-          <Route path="/application/:id" element={<UserApplicationDetail />} />
-          <Route path="/application/new" element={<NewApply />} />
-          <Route path="/meal-list" element={<MealList />} />
-          <Route path="/meal/meal-data" element={<MealData />} />
-          <Route path="/meal/meal-expense" element={<MealExpense />} />
+          <Route
+            element={
+              <AuthenticationLayout>
+                <Outlet />
+              </AuthenticationLayout>
+            }
+          >
+            <Route path="/mypage" element={<TeacherMyPage />} />
+            <Route path="/teacher/application" element={<TeacherApplication />} />
+            <Route path="/teacher/students" element={<StudentList />} />
+            <Route path="/teacher/parents" element={<ParentList />} />
+            <Route path="/teacher/staffs" element={<StaffList />} />
+            <Route path="/teacher/meal-management" element={<MealManagement />} />
+            <Route path="/teacher/meal-choice" element={<MealChoice />} />
+            <Route path="/application" element={<UserApplication />} />
+            <Route path="/application/:id" element={<UserApplicationDetail />} />
+            <Route path="/application/new" element={<NewApply />} />
+            <Route path="/meal-list" element={<MealList />} />
+            <Route path="/meal/meal-data" element={<MealData />} />
+            <Route path="/meal/meal-expense" element={<MealExpense />} />
+          </Route>
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/" element={<Login />} />
+        <Route
+          element={
+            <FetchSession>
+              <Outlet />
+            </FetchSession>
+          }
+        >
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
+        </Route>
       </Routes>
     </MainLayout>
   )

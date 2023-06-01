@@ -1,25 +1,69 @@
-import React, { useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
+import { AxiosError, AxiosResponse } from "axios"
+import { useRecoilState } from "recoil"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
-import { Box, Image, TextField, Button, Switch, FormControlLabel, Typography } from "src/UILibrary"
+import { Box, Image, Button, Select, MenuItem } from "src/UILibrary"
+import { LoadingModal } from "src/components/shared/loadingModal"
 
-import LogoImage from "src/assets/imgs/logo.png"
+import { UserState } from "src/types/user"
 import { ISession } from "src/types/session"
+import { usePushAlerts } from "src/hooks/alerts"
+import { USER_STATE } from "src/constants/userState"
+import { useSession } from "src/modules/sessionProvider"
+import { isLoginRefreshState } from "src/states/provider"
+import { useGetLoginLink, useMicroSoftLogin } from "src/queries/auth"
+import LogoImage from "src/assets/imgs/logo.png"
 
 export const Login: React.FC = () => {
+  const isMounted = useRef(false)
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [authType, setAuthType] = useState<ISession>({ id: "" })
+  const session = useSession()
+  const pushAlerts = usePushAlerts()
 
-  const onClickForgotPassword = () => {
-    navigate("/reset-password")
+  const [searchParams] = useSearchParams()
+  const [userState, setUserState] = useState<UserState>("teacher")
+  const [isLoginRefresh, setIsLoginRefresh] = useRecoilState(isLoginRefreshState)
+
+  const { data: loginLink, error: linkError } = useGetLoginLink(userState)
+
+  const { mutate: microSoftCodeLogin, isLoading } = useMicroSoftLogin({
+    onSuccess: (res: AxiosResponse<ISession>) => {
+      session?.setValue(res.data)
+      navigate("/mypage")
+      setIsLoginRefresh(true)
+    },
+    onError: (err: AxiosError) => {
+      pushAlerts({ message: err.message, color: "error" })
+    },
+  })
+
+  const microsoftLogin = () => {
+    if (loginLink) {
+      window.location.href = loginLink?.data.loginLink
+    } else if (linkError) {
+      pushAlerts({ message: linkError.message, color: "error" })
+    }
   }
 
-  const nextPage = () => {
-    localStorage.setItem("auth", JSON.stringify(authType))
-    navigate("/my-page")
-  }
+  useEffect(() => {
+    const code = searchParams.get("code") || ""
+    const role = searchParams.get("state") || ""
+    sessionStorage.setItem("code", code)
+    if (isMounted.current) {
+      if (code && userState && !isLoginRefresh) {
+        microSoftCodeLogin({
+          role: role,
+          code: code,
+        })
+      }
+    } else {
+      isMounted.current = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Box
@@ -34,55 +78,33 @@ export const Login: React.FC = () => {
     >
       <Box sx={{ width: 400, display: "flex", alignItems: "center", flexDirection: "column" }}>
         <Image src={LogoImage} alt="Logo" sx={{ mb: 3 }} />
-        <TextField
+        <Select
           fullWidth
-          sx={{ fontWeight: 700, mb: 3 }}
-          placeholder={t("login.id")}
-          value={authType.id}
-          onChange={(e) => setAuthType({ id: e.target.value })}
-        />
-        <TextField fullWidth sx={{ fontWeight: 700, mb: 0.5 }} placeholder={t("login.password")} />
-        <Box sx={{ width: "100%", pb: 0.5 }}>
-          <FormControlLabel
-            control={<Switch />}
-            label={t("login.show_password")}
-            sx={{
-              ".MuiTypography-root": {
-                fontSize: 12,
-                lineHeight: 1,
-                color: "primary.light",
-                fontWeight: 600,
-                letterSpacing: 2,
-              },
-            }}
-          />
-        </Box>
+          sx={{
+            "& .MuiSelect-select": {
+              bgcolor: "background.default",
+            },
+          }}
+          value={userState}
+          onChange={(e) => setUserState(e.target.value as UserState)}
+        >
+          {USER_STATE.map((user) => (
+            <MenuItem key={user.key} value={user.key}>
+              {t(user.label)}
+            </MenuItem>
+          ))}
+        </Select>
         <Button
           fullWidth
           color="primary"
           variant="contained"
-          sx={{ mb: 2.5 }}
-          // onClick={() => localStorage.setItem("auth", authType)}
-          onClick={nextPage}
+          sx={{ mb: 2.5, mt: 5 }}
+          onClick={microsoftLogin}
         >
           {t("login.login")}
         </Button>
-        <Typography.Detail
-          sx={{
-            px: 1,
-            py: 0.5,
-            color: "text.disabled",
-            cursor: "pointer",
-            transition: "all 0.3s ease-in-out",
-            "&:hover": {
-              color: "primary.main",
-            },
-          }}
-          onClick={onClickForgotPassword}
-        >
-          {t("login.forgot_password")}
-        </Typography.Detail>
       </Box>
+      <LoadingModal open={isLoading} />
     </Box>
   )
 }

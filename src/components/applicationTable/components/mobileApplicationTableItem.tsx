@@ -22,7 +22,7 @@ export const ApplicationTableItem: React.FC<ApplicationTableProps> = ({
   const session = useSession()
 
   const handleApplication = () => {
-    session?.value.id !== "teacher" && navigate(`/application/${content.id}`)
+    session?.value.user.role !== "teacher" && navigate(`/application/${content.id}`)
     onEdit && onEdit(content)
   }
 
