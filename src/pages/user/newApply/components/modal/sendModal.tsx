@@ -5,28 +5,35 @@ import { Box, Button, Grid, Typography } from "src/UILibrary"
 import { Modal } from "src/components/modal"
 
 interface SendModalProps {
+  isLoading: boolean
   open: boolean
   // eslint-disable-next-line no-unused-vars
   handleSendOpen: (open: boolean) => void
   // eslint-disable-next-line no-unused-vars
   handleConfirmOpen: (open: boolean) => void
+  handleSubmit: Function
 }
 
 export const SendModal: React.FC<SendModalProps> = ({
+  isLoading,
   open,
   handleSendOpen,
-  handleConfirmOpen,
+  //handleConfirmOpen,
+  handleSubmit,
 }) => {
   const { t } = useTranslation()
+  const handleClick = () => {
+    handleSubmit()
+  }
 
   const handleClose = () => {
     handleSendOpen(false)
   }
 
-  const handleConfirm = () => {
-    handleSendOpen(false)
-    handleConfirmOpen(true)
-  }
+  // const handleConfirm = () => {
+  //   handleSendOpen(false)
+  //   handleConfirmOpen(true)
+  // }
 
   return (
     <Modal handleClose={handleClose} open={open}>
@@ -54,6 +61,7 @@ export const SendModal: React.FC<SendModalProps> = ({
                 p: "0.5625rem 2.625rem",
               }}
               variant="outlined"
+              onClick={() => handleSendOpen(false)}
             >
               {t("application.back")}
             </Button>
@@ -68,7 +76,10 @@ export const SendModal: React.FC<SendModalProps> = ({
                 p: "0.5625rem 2.625rem",
               }}
               variant="contained"
-              onClick={handleConfirm}
+              // onClick={handleConfirm}
+              loading={isLoading}
+              disabled={isLoading}
+              onClick={handleClick}
             >
               {t("application.confirm")}
             </Button>

@@ -1,3 +1,4 @@
+import { IApplicationListFilters } from "src/types/application"
 import { IParentListFilters } from "src/types/parent"
 import { IStudentListFilters } from "src/types/student"
 import { ITeacherListFilters } from "src/types/teacher"
@@ -46,6 +47,22 @@ export const getOptimizedTeacherListFilters = (
   !params.fullName && delete result.fullName
   !params.fullNameKana && delete result.fullNameKana
   !params.types && delete result.types
+
+  return result
+}
+
+export const getOptimizedApplicationListFilters = (
+  params: IApplicationListFilters
+): Partial<IApplicationListFilters> => {
+  const result: Partial<IApplicationListFilters> = { ...params }
+
+  !params.sort && delete result.sort
+  !params.student_name && delete result.student_name
+  !params.category && delete result.category
+  !params.status && delete result.status
+  !params.created_at && delete result.created_at
+  !params.departure_date && delete result.departure_date
+  !params.arrival_date && delete result.arrival_date
 
   return result
 }

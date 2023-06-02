@@ -1,16 +1,35 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
-import { Box, Button, Divider, MenuItem, Select, TextField, Typography } from "src/UILibrary"
+import { Box, Button, CircularProgress, Divider, TextField, Typography } from "src/UILibrary"
 import { InputField } from "../newApply/components/field/inputField"
 
-import { CATEGORY_TYPES } from "src/constants/categoryType"
-import { CategoryType } from "src/types/application"
+import { useGetApplication } from "src/queries/application"
+import { formattedDate } from "src/modules/date"
 
 export const UserApplicationDetail: React.FC = () => {
   const { t } = useTranslation()
+  const { id } = useParams()
   const navigate = useNavigate()
+
+  const { data: applicationData, isLoading, error } = useGetApplication(id || "", "")
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", my: { xs: 35, md: 50 }, flexGrow: 1 }}>
+        <CircularProgress color="primary" />
+      </Box>
+    )
+  }
+
+  if (error) {
+    return (
+      <Typography.DetailHeading sx={{ textAlign: "center", color: "error.main", flexGrow: 1 }}>
+        {error.message}
+      </Typography.DetailHeading>
+    )
+  }
 
   return (
     <Box
@@ -34,39 +53,46 @@ export const UserApplicationDetail: React.FC = () => {
         <Divider sx={{ borderColor: "text.primary", width: "100%", mt: "1rem", mb: "2.25rem" }} />
         <Box flexDirection="column" sx={{ display: "flex", gap: "0.5rem" }}>
           <InputField label={t("application.registration_number")}>
-            <TextField sx={{ width: { md: "50%", xs: "100%" } }} />
+            <TextField
+              sx={{ width: { md: "50%", xs: "100%" } }}
+              value={applicationData?.data.student_id || ""}
+            />
           </InputField>
           <InputField label={t("application.student")}>
-            <TextField sx={{ width: { md: "50%", xs: "100%" } }} />
+            <TextField
+              sx={{ width: { md: "50%", xs: "100%" } }}
+              value={applicationData?.data.student_name || ""}
+            />
           </InputField>
           <InputField label={t("application.charge")}>
-            <TextField sx={{ width: { md: "50%", xs: "100%" } }} />
+            <TextField
+              sx={{ width: { md: "50%", xs: "100%" } }}
+              value={applicationData?.data.hm || ""}
+            />
           </InputField>
           <InputField label={t("application.application_time")}>
-            <TextField sx={{ width: { md: "50%", xs: "100%" } }} />
+            <TextField
+              sx={{ width: { md: "50%", xs: "100%" } }}
+              value={formattedDate(applicationData?.data.created_at as string) || ""}
+            />
           </InputField>
           <InputField label={t("application.departure_time")}>
-            <TextField sx={{ width: { md: "50%", xs: "100%" } }} />
+            <TextField
+              sx={{ width: { md: "50%", xs: "100%" } }}
+              value={formattedDate(applicationData?.data.departure_datetime as string) || ""}
+            />
           </InputField>
           <InputField label={t("application.return_time")}>
-            <TextField sx={{ width: { md: "50%", xs: "100%" } }} />
+            <TextField
+              sx={{ width: { md: "50%", xs: "100%" } }}
+              value={formattedDate(applicationData?.data.arrival_datetime as string) || ""}
+            />
           </InputField>
           <InputField label={t("application.category")}>
-            <Select
-              fullWidth
-              sx={{
-                width: { md: "50%", xs: "100%" },
-                "& .MuiSelect-select": {
-                  bgcolor: "background.default",
-                },
-              }}
-            >
-              {Object.keys(CATEGORY_TYPES).map((categoryType) => (
-                <MenuItem key={categoryType} value={categoryType}>
-                  {t(CATEGORY_TYPES[categoryType as CategoryType])}
-                </MenuItem>
-              ))}
-            </Select>
+            <TextField
+              sx={{ width: { md: "50%", xs: "100%" } }}
+              value={applicationData?.data.category || ""}
+            />
           </InputField>
           <InputField label={t("application.application_content")}>
             <TextField
@@ -83,11 +109,14 @@ export const UserApplicationDetail: React.FC = () => {
               rows={5}
               id="outlined-multiline-static"
               multiline
-              defaultValue="テキスト"
+              value={applicationData?.data.content || ""}
             />
           </InputField>
           <InputField label={t("application.approval_status")}>
-            <TextField sx={{ width: { md: "50%", xs: "100%" } }} />
+            <TextField
+              sx={{ width: { md: "50%", xs: "100%" } }}
+              value={applicationData?.data.status || ""}
+            />
           </InputField>
         </Box>
         <Box

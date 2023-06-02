@@ -5,6 +5,8 @@ import { Box, TableCell, TableRow, Typography } from "src/UILibrary"
 
 import { Application } from "src/types/application"
 import { useSession } from "src/modules/sessionProvider"
+import { formattedDate } from "src/modules/date"
+import { useTranslation } from "react-i18next"
 
 interface ApplicationTableProps {
   keyValue: number
@@ -18,11 +20,13 @@ export const ApplicationTableItem: React.FC<ApplicationTableProps> = ({
   content,
   onEdit,
 }) => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const session = useSession()
 
   const handleApplication = () => {
-    session?.value.user.role !== "teacher" && navigate(`/application/${content.id}`)
+    session?.value.user.role !== "teacher" &&
+      navigate(`/application/${content.id}`, { state: content })
     onEdit && onEdit(content)
   }
 
@@ -48,17 +52,23 @@ export const ApplicationTableItem: React.FC<ApplicationTableProps> = ({
       }}
     >
       <TableCell>
-        <Typography.Action>{content.id}</Typography.Action>
+        <Typography.Action>{content.student_id}</Typography.Action>
       </TableCell>
       <TableCell>
-        <Typography.Action>{content.student}</Typography.Action>
+        <Typography.Action>{content.student_name}</Typography.Action>
       </TableCell>
       <TableCell>
-        <Typography.Action>{content.applicationtime}</Typography.Action>
+        <Typography.Action>{formattedDate(content?.created_at as string) || ""}</Typography.Action>
       </TableCell>
       <TableCell>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Typography.Action>{content.approval}</Typography.Action>
+          <Typography.Action>{`${
+            content.status === "APPROVED"
+              ? t("approve_type.approve")
+              : content.status === "REJECTED"
+              ? t("approve_type.deny")
+              : t("approve_type.un_approve")
+          }`}</Typography.Action>
         </Box>
       </TableCell>
     </TableRow>

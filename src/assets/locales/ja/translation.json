@@ -1,4 +1,11 @@
 {
+  "error": {
+    "required": "この項目は必須です。",
+    "invalid_number": "有効な数値を入力してください。",
+    "invalid_student_name_length": "生徒名は150文字以下に設定してください。",
+    "invalid_departure_detail_length": "出発同伴者名は150文字以下に設定してください。",
+    "invalid_arrival_detail_length": "帰着同伴者名は150文字以下に設定してください。"
+  },
   "login": {
     "id": "ID",
     "password": "パスワード",
@@ -23,6 +30,7 @@
     "go_home": "帰寮帰宅"
   },
   "approve_type": {
+    "all": "全て",
     "un_approve": "未承認",
     "approve": "承認",
     "deny": "却下"
@@ -73,6 +81,7 @@
     "charge": "担当HM",
     "checked": "チェックした",
     "approve_request": "件の申請を承認しますか？",
+    "approval_warning": "承認リストを選択してください!",
     "student": "生徒",
     "parent": "保護者",
     "none": "なし",

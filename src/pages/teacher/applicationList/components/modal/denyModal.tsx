@@ -1,8 +1,13 @@
-import React from "react"
+import { AxiosError } from "axios"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useQueryClient } from "@tanstack/react-query"
 
 import { Typography, Button, Box, Divider, TextField } from "src/UILibrary"
 import { Modal } from "src/components/modal"
+
+import { usePushAlerts } from "src/hooks/alerts"
+import { useRejectApplication } from "src/queries/application"
 
 interface DenyModalProps {
   open: boolean
@@ -13,9 +18,30 @@ interface DenyModalProps {
 
 export const DenyModal: React.FC<DenyModalProps> = ({ open, handleDenyOpen, registNumber }) => {
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
+  const pushAlerts = usePushAlerts()
+  const [rejectReason, setRejectReason] = useState<string>("")
 
   const handleClose = () => {
     handleDenyOpen(false)
+  }
+
+  const { mutate: rejectApplication, isLoading } = useRejectApplication({
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getApplicationList"])
+      handleClose()
+    },
+    onError: (err: AxiosError) => {
+      pushAlerts({ message: err.message, color: "error" })
+    },
+  })
+
+  const onRejectApplication = () => {
+    rejectApplication({
+      id: registNumber,
+      token: "",
+      data: { reason: rejectReason },
+    })
   }
 
   return (
@@ -37,6 +63,8 @@ export const DenyModal: React.FC<DenyModalProps> = ({ open, handleDenyOpen, regi
           rows={8}
           id="outlined-multiline-static"
           multiline
+          value={rejectReason}
+          onChange={(e) => setRejectReason(e.target.value)}
           sx={{
             "& .MuiOutlinedInput-root": {
               "& fieldset": {
@@ -70,6 +98,7 @@ export const DenyModal: React.FC<DenyModalProps> = ({ open, handleDenyOpen, regi
             p: "0.5625rem 2.375rem",
             mr: "1.25rem",
           }}
+          onClick={handleClose}
         >
           {t("application.back")}
         </Button>
@@ -82,6 +111,9 @@ export const DenyModal: React.FC<DenyModalProps> = ({ open, handleDenyOpen, regi
             color: "background.default",
             p: "0.5625rem 2.375rem",
           }}
+          loading={isLoading}
+          disabled={isLoading}
+          onClick={onRejectApplication}
         >
           {t("application.deny")}
         </Button>

@@ -13,18 +13,87 @@ import {
   TextField,
   Typography,
 } from "src/UILibrary"
+import { formatDate } from "src/modules/date"
+import { IApplicationListFilters } from "src/types/application"
 
-export const StudentSearchBox: React.FC = () => {
+interface SearchBoxProps {
+  initialData: IApplicationListFilters
+  // eslint-disable-next-line no-unused-vars
+  handleFilterChange: (data: IApplicationListFilters) => void
+}
+
+export const StudentSearchBox: React.FC<SearchBoxProps> = ({ initialData, handleFilterChange }) => {
   const { t } = useTranslation()
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
-  const [startDate, setStartDate] = useState<string | null>()
-  const [endDate, setEndDate] = useState<string | null>()
+
+  const [sort] = useState<string>(initialData.sort)
+  const [student_name] = useState<string>(initialData.student_name)
+  const [category] = useState<string>(initialData.category)
+  const [status] = useState<string>(initialData.status)
+  const [startCreatedAt, setStartCreatedAt] = useState<string | null>(
+    initialData.created_at.split(",")[0] ? initialData.created_at.split(",")[0] : null
+  )
+  const [endCreatedAt, setEndCreatedAt] = useState<string | null>(
+    initialData.created_at.split(",")[1] ? initialData.created_at.split(",")[1] : null
+  )
+  const [startDepartureDate, setStartDepartureDate] = useState<string | null>(
+    initialData.departure_date.split(",")[0] ? initialData.departure_date.split(",")[0] : null
+  )
+  const [endDepartureDate, setEndDepartureDate] = useState<string | null>(
+    initialData.departure_date.split(",")[1] ? initialData.departure_date.split(",")[1] : null
+  )
+  const [startArrivalDate, setStartArrivalDate] = useState<string | null>(
+    initialData.arrival_date.split(",")[0] ? initialData.arrival_date.split(",")[0] : null
+  )
+  const [endArrivalDate, setEndArrivalDate] = useState<string | null>(
+    initialData.arrival_date.split(",")[1] ? initialData.arrival_date.split(",")[1] : null
+  )
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
 
   const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleFilter = () => {
+    handleFilterChange({
+      sort,
+      student_name,
+      category,
+      status,
+      created_at:
+        startCreatedAt && endCreatedAt
+          ? formatDate(startCreatedAt.toString(), "yyyy-MM-dd hh:mm:ss") +
+            "," +
+            formatDate(endCreatedAt.toString(), "yyyy-MM-dd hh:mm:ss")
+          : startCreatedAt && !endCreatedAt
+          ? formatDate(startCreatedAt.toString(), "yyyy-MM-dd hh:mm:ss")
+          : !startCreatedAt && endCreatedAt
+          ? "," + formatDate(endCreatedAt.toString(), "yyyy-MM-dd hh:mm:ss")
+          : "",
+      departure_date:
+        startDepartureDate && endDepartureDate
+          ? formatDate(startDepartureDate.toString(), "yyyy-MM-dd hh:mm:ss") +
+            "," +
+            formatDate(endDepartureDate.toString(), "yyyy-MM-dd hh:mm:ss")
+          : startDepartureDate && !endDepartureDate
+          ? formatDate(startDepartureDate.toString(), "yyyy-MM-dd hh:mm:ss")
+          : !startDepartureDate && endDepartureDate
+          ? "," + formatDate(endDepartureDate.toString(), "yyyy-MM-dd hh:mm:ss")
+          : "",
+      arrival_date:
+        startArrivalDate && endArrivalDate
+          ? formatDate(startArrivalDate.toString(), "yyyy-MM-dd hh:mm:ss") +
+            "," +
+            formatDate(endArrivalDate.toString(), "yyyy-MM-dd hh:mm:ss")
+          : startArrivalDate && !endArrivalDate
+          ? formatDate(startArrivalDate.toString(), "yyyy-MM-dd hh:mm:ss")
+          : !startArrivalDate && endArrivalDate
+          ? "," + formatDate(endArrivalDate.toString(), "yyyy-MM-dd hh:mm:ss")
+          : "",
+    })
     setAnchorEl(null)
   }
 
@@ -81,8 +150,8 @@ export const StudentSearchBox: React.FC = () => {
             <Box display="flex" alignItems="center" sx={{ mt: "0.625rem", mb: "1.25rem" }}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  value={startDate}
-                  onChange={(value) => setStartDate(value)}
+                  value={startCreatedAt}
+                  onChange={(value) => setStartCreatedAt(value)}
                   inputFormat="yyyy/MM/dd"
                   renderInput={(params) => (
                     <TextField fullWidth sx={{ width: "140px" }} {...params} />
@@ -92,8 +161,8 @@ export const StudentSearchBox: React.FC = () => {
               <Typography.Description sx={{ mx: 1 }}>~</Typography.Description>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  value={endDate}
-                  onChange={(value) => setEndDate(value)}
+                  value={endCreatedAt}
+                  onChange={(value) => setEndCreatedAt(value)}
                   inputFormat="yyyy/MM/dd"
                   renderInput={(params) => (
                     <TextField fullWidth sx={{ width: "140px" }} {...params} />
@@ -107,8 +176,8 @@ export const StudentSearchBox: React.FC = () => {
             <Box display="flex" alignItems="center" sx={{ mt: "0.625rem", mb: "1.25rem" }}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  value={startDate}
-                  onChange={(value) => setStartDate(value)}
+                  value={startDepartureDate}
+                  onChange={(value) => setStartDepartureDate(value)}
                   inputFormat="yyyy/MM/dd"
                   renderInput={(params) => (
                     <TextField fullWidth sx={{ width: "140px" }} {...params} />
@@ -118,8 +187,8 @@ export const StudentSearchBox: React.FC = () => {
               <Typography.Description sx={{ mx: 1 }}>~</Typography.Description>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  value={endDate}
-                  onChange={(value) => setEndDate(value)}
+                  value={endDepartureDate}
+                  onChange={(value) => setEndDepartureDate(value)}
                   inputFormat="yyyy/MM/dd"
                   renderInput={(params) => (
                     <TextField fullWidth sx={{ width: "140px" }} {...params} />
@@ -140,8 +209,8 @@ export const StudentSearchBox: React.FC = () => {
               <Box display="flex" alignItems="center" sx={{ mt: "0.625rem" }}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
-                    value={startDate}
-                    onChange={(value) => setStartDate(value)}
+                    value={startArrivalDate}
+                    onChange={(value) => setStartArrivalDate(value)}
                     inputFormat="yyyy/MM/dd"
                     renderInput={(params) => (
                       <TextField fullWidth sx={{ width: "140px" }} {...params} />
@@ -151,8 +220,8 @@ export const StudentSearchBox: React.FC = () => {
                 <Typography.Description sx={{ mx: 1 }}>~</Typography.Description>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
-                    value={endDate}
-                    onChange={(value) => setEndDate(value)}
+                    value={endArrivalDate}
+                    onChange={(value) => setEndArrivalDate(value)}
                     inputFormat="yyyy/MM/dd"
                     renderInput={(params) => (
                       <TextField fullWidth sx={{ width: "140px" }} {...params} />
@@ -161,6 +230,7 @@ export const StudentSearchBox: React.FC = () => {
                 </LocalizationProvider>
               </Box>
               <Button
+                variant="contained"
                 sx={{
                   backgroundColor: "secondary.dark",
                   borderRadius: "0.1875rem",
@@ -169,7 +239,7 @@ export const StudentSearchBox: React.FC = () => {
                   mx: "auto",
                   width: "115px",
                 }}
-                variant="contained"
+                onClick={handleFilter}
               >
                 <Typography.Detail>{t("application.search_condition")}</Typography.Detail>
               </Button>

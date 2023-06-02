@@ -1,11 +1,16 @@
 import React from "react"
+import { AxiosError } from "axios"
 import { useTranslation } from "react-i18next"
+import { useQueryClient } from "@tanstack/react-query"
 
 import { Typography, Button, Box, Divider, Grid, TextField } from "src/UILibrary"
 import { Modal } from "src/components/modal"
 import { InputField } from "../field/inputField"
 
 import { Application } from "src/types/application"
+import { usePushAlerts } from "src/hooks/alerts"
+import { useApproveApplication } from "src/queries/application"
+import { formattedDate } from "src/modules/date"
 
 interface ApplicationModalProps {
   open: boolean
@@ -23,6 +28,8 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
   handleDenyOpen,
 }) => {
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
+  const pushAlerts = usePushAlerts()
 
   const handleClose = () => {
     handleApplicationOpen(false)
@@ -31,6 +38,23 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
   const handleDeny = () => {
     handleApplicationOpen(false)
     handleDenyOpen(true)
+  }
+
+  const { mutate: approveApplication, isLoading } = useApproveApplication({
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getApplicationList"])
+      handleClose()
+    },
+    onError: (err: AxiosError) => {
+      pushAlerts({ message: err.message, color: "error" })
+    },
+  })
+
+  const onApproveApplication = () => {
+    approveApplication({
+      data: application?.student_id,
+      token: "",
+    })
   }
 
   return (
@@ -51,25 +75,29 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
         <Grid container rowSpacing={2}>
           <Grid container spacing={1} item sm={5}>
             <InputField label={t("application.category")}>
-              <Typography.Description>{`: ${application?.category}`}</Typography.Description>
+              <Typography.Description>{`${application?.category}`}</Typography.Description>
             </InputField>
             <InputField label={t("application.student_number")}>
-              <Typography.Description>: 1111111</Typography.Description>
+              <Typography.Description>{`${application?.student_id}`}</Typography.Description>
             </InputField>
             <InputField label={t("application.student_name")}>
-              <Typography.Description>{`: ${application?.student}`}</Typography.Description>
+              <Typography.Description>{`${application?.student_name}`}</Typography.Description>
             </InputField>
             <InputField label={t("application.departure_time")}>
-              <Typography.Description>: 3月7日 午前10時</Typography.Description>
+              <Typography.Description>
+                {formattedDate(application?.departure_datetime as string) || ""}
+              </Typography.Description>
             </InputField>
             <InputField label={t("application.departure_companion")}>
-              <Typography.Description>: 吉岡美波</Typography.Description>
+              <Typography.Description>{`${application?.departure_companion}`}</Typography.Description>
             </InputField>
             <InputField label={t("application.return_time")}>
-              <Typography.Description>: 3月7日 午前10時</Typography.Description>
+              <Typography.Description>
+                {formattedDate(application?.arrival_datetime as string) || ""}
+              </Typography.Description>
             </InputField>
             <InputField label={t("application.return_companion")}>
-              <Typography.Description>: 吉岡美波</Typography.Description>
+              <Typography.Description>{`${application?.arrival_companion}`}</Typography.Description>
             </InputField>
           </Grid>
           <Grid item sm={7} sx={{ pl: "0.6rem" }}>
@@ -78,9 +106,10 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
             </Box>
             <TextField
               rows={6}
-              id="outlined-multiline-static"
               multiline
-              value={application?.reason}
+              disabled={true}
+              id="outlined-multiline-static"
+              value={application?.content}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
@@ -128,6 +157,9 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
             color: "background.default",
             p: "0.5625rem 2.375rem",
           }}
+          loading={isLoading}
+          disabled={isLoading}
+          onClick={onApproveApplication}
         >
           {t("application.approve")}
         </Button>

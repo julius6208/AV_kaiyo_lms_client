@@ -1,39 +1,144 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
 import { Box, Button, MenuItem, Select, SelectChangeEvent, Typography } from "src/UILibrary"
 import { ApplicationListTable } from "src/components/applicationTable"
-import { ApproveModal } from "./components/modal/approveModal"
+import { MultipleApproveModal } from "./components/modal/approveModal"
 import { ApplicationModal } from "./components/modal/applicationModal"
-import { ProxyModal } from "./components/modal/proxyModal"
 import { DenyModal } from "./components/modal/denyModal"
 import { SearchBox } from "./components/searchBox"
 
 import { PAGE_SIZE } from "src/constants/common"
-import { Application } from "src/types/application"
-import { MOCK_APPLICATION_DATA } from "./mockdata"
-
-const applicationData: Application[] = MOCK_APPLICATION_DATA
+import {
+  Application,
+  ApproveType,
+  CategoryType,
+  IApplicationListFilters,
+  IApplicationSorts,
+} from "src/types/application"
+import { useGetApplicationList } from "src/queries/application"
+import { getOptimizedApplicationListFilters } from "src/modules/filters"
 
 export const TeacherApplication: React.FC = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const [page, setPage] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number>(1)
   const [displayCount, setDisplayCount] = useState<number>(PAGE_SIZE[0])
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const sort = searchParams.get("sort") || ""
+  const sortBy = sort.split(",")[0]
+  const sortOrder = sort.split(",")[1]
+  const student_name = searchParams.get("student_name") || ""
+  const category = searchParams.get("category") || ""
+  const status = searchParams.get("status") || ""
+  const created_at = searchParams.get("created_at") || ""
+  const departure_date = searchParams.get("departure_date") || ""
+  const arrival_date = searchParams.get("arrival_date") || ""
+
   const [applicationModalOpen, setApplicationModalOpen] = useState<boolean>(false)
   const [application, setApplication] = useState<Application>()
-  const [checkedApplications, setCheckedApplications] = useState<Application[]>([])
+  const [checkedApplicationIds, setCheckedApplicationIds] = useState<number[]>([])
   const [denyModalOpen, setDenyModalOpen] = useState<boolean>(false)
   const [approveModalOpen, setApproveModalOpen] = useState<boolean>(false)
-  const [proxyModalOpen, setProxyModalOpen] = useState<boolean>(false)
+
+  const {
+    data: applicationData,
+    isLoading,
+    error,
+  } = useGetApplicationList(
+    page,
+    displayCount,
+    "",
+    sort,
+    student_name,
+    category,
+    status,
+    created_at,
+    departure_date,
+    arrival_date
+  )
+
+  const handleSearchParams = (
+    sortBy: string,
+    sortOrder: string,
+    studentName: string,
+    category: CategoryType | string,
+    status: ApproveType | string,
+    created_at: string,
+    departure_date: string,
+    arrival_date: string
+  ) => {
+    const newSearchParam: Partial<IApplicationSorts> = {}
+    newSearchParam.sort = sortBy + "," + sortOrder
+    if (studentName) {
+      newSearchParam.student_name = studentName
+    }
+    if (category) {
+      newSearchParam.category = category
+    }
+    if (status) {
+      newSearchParam.status = status
+    }
+    if (created_at) {
+      newSearchParam.created_at = created_at
+    }
+    if (departure_date) {
+      newSearchParam.departure_datetime = departure_date
+    }
+    if (arrival_date) {
+      newSearchParam.arrival_datetime = arrival_date
+    }
+    setSearchParams(newSearchParam, { replace: true })
+  }
 
   const handleEdit = (row: Application) => {
     setApplication(row)
     setApplicationModalOpen(true)
   }
 
-  const approvedValues = useMemo(
-    () => checkedApplications.filter((item) => item.checked === true),
-    [checkedApplications]
-  )
+  const handleSort = (fieldName: string) => {
+    const newSortOrder =
+      fieldName === sortBy
+        ? sortOrder === "asc"
+          ? "desc"
+          : "asc"
+        : fieldName === ""
+        ? "desc"
+        : "asc"
+    handleSearchParams(
+      fieldName,
+      newSortOrder,
+      student_name,
+      category,
+      status,
+      created_at,
+      departure_date,
+      arrival_date
+    )
+  }
+
+  const handleFilterChange = (data: IApplicationListFilters) => {
+    const newSearchParam = getOptimizedApplicationListFilters(data)
+    setSearchParams(
+      Object.keys(newSearchParam).reduce(
+        (prev, curr) => ({
+          ...prev,
+          [curr]: newSearchParam[curr as keyof IApplicationListFilters]?.toString(),
+        }),
+        {}
+      ),
+      { replace: true }
+    )
+  }
+
+  useEffect(() => {
+    if (applicationData) {
+      setTotalPages(Math.ceil(applicationData.data.total / displayCount))
+    }
+  }, [displayCount, applicationData])
 
   return (
     <Box
@@ -72,7 +177,7 @@ export const TeacherApplication: React.FC = () => {
               mt: "0.8125rem",
               mb: "0.8125rem",
             }}
-            onClick={() => setProxyModalOpen(true)}
+            onClick={() => navigate("/teacher/application/new")}
           >
             <Typography.Title
               sx={{ fontWeight: 500, fontSize: "20px", textAlign: "center", lineHeight: "1.5rem" }}
@@ -91,7 +196,18 @@ export const TeacherApplication: React.FC = () => {
           }}
         >
           <Box>
-            <SearchBox />
+            <SearchBox
+              initialData={{
+                sort,
+                student_name,
+                category,
+                status,
+                created_at,
+                departure_date,
+                arrival_date,
+              }}
+              handleFilterChange={handleFilterChange}
+            />
             <Box
               sx={{
                 display: "flex",
@@ -101,7 +217,15 @@ export const TeacherApplication: React.FC = () => {
                 gap: "1.125rem",
               }}
             >
-              <Typography.Detail>1~50/500</Typography.Detail>
+              <Typography.Detail>{`${
+                !applicationData?.data.applications.length ? 0 : displayCount * (page - 1) + 1
+              }~${
+                !applicationData?.data.applications.length
+                  ? 0
+                  : applicationData?.data.applications.length
+              } / ${
+                !applicationData?.data.total ? 0 : applicationData?.data.total
+              }`}</Typography.Detail>
               <Typography.Detail>{t("application.display_count")}</Typography.Detail>
               <Select
                 value={displayCount}
@@ -140,12 +264,17 @@ export const TeacherApplication: React.FC = () => {
           </Button>
         </Box>
         <ApplicationListTable
-          applicationData={applicationData}
+          applicationData={applicationData?.data.applications || []}
           onEdit={handleEdit}
-          setApplications={setCheckedApplications}
-          pagination={{ count: 10, currentPage: 1 }}
-          sortBy=""
-          sortOrder=""
+          checkedApplicationIds={checkedApplicationIds}
+          setApproveApplicationIds={setCheckedApplicationIds}
+          onPageNumChange={setPage}
+          pagination={{ count: totalPages, currentPage: page }}
+          isLoading={isLoading}
+          error={error?.message}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          handleSort={handleSort}
         />
       </Box>
       <ApplicationModal
@@ -159,12 +288,11 @@ export const TeacherApplication: React.FC = () => {
         handleDenyOpen={setDenyModalOpen}
         registNumber={application?.id}
       />
-      <ApproveModal
+      <MultipleApproveModal
         open={approveModalOpen}
         handleApproveOpen={setApproveModalOpen}
-        checkedApplicationDatas={approvedValues}
+        checkedApplicationIds={checkedApplicationIds}
       />
-      <ProxyModal open={proxyModalOpen} handleProxyOpen={setProxyModalOpen} />
     </Box>
   )
 }
