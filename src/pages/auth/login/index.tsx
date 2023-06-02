@@ -65,8 +65,7 @@ export const Login: React.FC = () => {
     } else {
       isMounted.current = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isLoginRefresh, microSoftCodeLogin, searchParams, userState])
 
   return (
     <Box
