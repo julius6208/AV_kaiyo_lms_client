@@ -96,3 +96,36 @@ export const createTeacherSearchParams = (
   }
   return result
 }
+
+export const createApplicationSearchParams = (
+  pageNum: number,
+  perPage: number,
+  sort?: string,
+  student_name?: string,
+  category?: string,
+  status?: string,
+  created_at?: string,
+  departure_date?: string,
+  arrival_date?: string
+) => {
+  let result = `?pageNum=${pageNum}&perPage=${perPage}&sort=${sort}`
+  if (student_name) {
+    result += `&student_name=${student_name}`
+  }
+  if (category) {
+    result += `&category=${category}`
+  }
+  if (status) {
+    result += `&status=${status}`
+  }
+  if (created_at) {
+    result += `&created_at=${created_at}`
+  }
+  if (departure_date) {
+    result += `&departure_date=${departure_date}`
+  }
+  if (arrival_date) {
+    result += `&arrival_date=${arrival_date}`
+  }
+  return result
+}

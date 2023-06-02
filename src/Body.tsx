@@ -5,6 +5,7 @@ import { MainLayout, MenuLayout } from "src/components/layout"
 import { Login } from "src/pages/auth/login"
 import { MyPage as TeacherMyPage } from "src/pages/teacher/myPage"
 import { TeacherApplication } from "src/pages/teacher/applicationList"
+import { TeacherNewApply } from "./pages/teacher/newApply"
 import { StudentList } from "src/pages/teacher/student"
 import { ParentList } from "src/pages/teacher/parent"
 import { MealManagement } from "./pages/teacher/mealManagement"
@@ -42,6 +43,7 @@ export function Body() {
           >
             <Route path="/mypage" element={<TeacherMyPage />} />
             <Route path="/teacher/application" element={<TeacherApplication />} />
+            <Route path="/teacher/application/new" element={<TeacherNewApply />} />
             <Route path="/teacher/students" element={<StudentList />} />
             <Route path="/teacher/parents" element={<ParentList />} />
             <Route path="/teacher/staffs" element={<StaffList />} />

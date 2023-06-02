@@ -1,22 +1,31 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Box, Button, TableCell, TableHead, TableRow, Typography } from "src/UILibrary"
 import { SortIcon } from "./sortIcon"
 
 import { useSession } from "src/modules/sessionProvider"
+import { Application } from "src/types/application"
 
 interface ApplicationTableHeaderProps {
-  sortBy: string
-  sortOrder: string
+  applicationData: Application[]
+  sortBy?: string
+  sortOrder?: string
+  handleSort?: Function
+  handleAllChecked: Function
 }
 
 export const ApplicationTableHeader: React.FC<ApplicationTableHeaderProps> = ({
   sortBy,
   sortOrder,
+  handleSort,
+  applicationData,
+  handleAllChecked,
 }) => {
   const { t } = useTranslation()
   const session = useSession()
+
+  const isAvailable = useMemo(() => !!applicationData.length, [applicationData])
 
   return (
     <TableHead>
@@ -44,7 +53,11 @@ export const ApplicationTableHeader: React.FC<ApplicationTableHeaderProps> = ({
           overflow: "scroll",
         }}
       >
-        <TableCell rowSpan={2} sx={{ width: "100px", position: "relative" }}>
+        <TableCell
+          rowSpan={2}
+          sx={{ width: "100px", position: "relative" }}
+          onClick={() => isAvailable && handleSort && handleSort("id")}
+        >
           <Box sx={{ cursor: "pointer" }}>
             <Typography.Title sx={{ fontWeight: 500, lineHeight: "1.5rem" }}>
               {t("application.registration_number")}
@@ -54,7 +67,11 @@ export const ApplicationTableHeader: React.FC<ApplicationTableHeaderProps> = ({
             </Box>
           </Box>
         </TableCell>
-        <TableCell rowSpan={2} sx={{ width: "100px", position: "relative" }}>
+        <TableCell
+          rowSpan={2}
+          sx={{ width: "100px", position: "relative" }}
+          onClick={() => isAvailable && handleSort && handleSort("student")}
+        >
           <Box sx={{ cursor: "pointer" }}>
             <Typography.Title sx={{ fontWeight: 500, lineHeight: "1.5rem" }}>
               {t("application.student")}
@@ -64,7 +81,11 @@ export const ApplicationTableHeader: React.FC<ApplicationTableHeaderProps> = ({
             </Box>
           </Box>
         </TableCell>
-        <TableCell rowSpan={2} sx={{ width: "100px", position: "relative" }}>
+        <TableCell
+          rowSpan={2}
+          sx={{ width: "100px", position: "relative" }}
+          onClick={() => isAvailable && handleSort && handleSort("hm")}
+        >
           <Box sx={{ cursor: "pointer" }}>
             <Typography.Title sx={{ fontWeight: 500, lineHeight: "1.5rem" }}>
               {t("application.charge")}
@@ -77,7 +98,11 @@ export const ApplicationTableHeader: React.FC<ApplicationTableHeaderProps> = ({
         <TableCell colSpan={3} sx={{ width: "304px", py: "10px !important" }}>
           {t("application.time")}
         </TableCell>
-        <TableCell rowSpan={2} sx={{ width: "175px", position: "relative" }}>
+        <TableCell
+          rowSpan={2}
+          sx={{ width: "175px", position: "relative" }}
+          onClick={() => isAvailable && handleSort && handleSort("category")}
+        >
           <Box sx={{ cursor: "pointer" }}>
             <Typography.Title sx={{ fontWeight: 500, lineHeight: "1.5rem" }}>
               {t("application.category")}
@@ -103,6 +128,7 @@ export const ApplicationTableHeader: React.FC<ApplicationTableHeaderProps> = ({
                 borderRadius: "0.3rem",
                 color: "secondary.dark",
               }}
+              onClick={() => handleAllChecked(true)}
             >
               <Typography.Action
                 sx={{
@@ -122,6 +148,7 @@ export const ApplicationTableHeader: React.FC<ApplicationTableHeaderProps> = ({
                 borderRadius: "0.3rem",
                 color: "secondary.dark",
               }}
+              onClick={() => handleAllChecked(false)}
             >
               <Typography.Action
                 sx={{
@@ -192,33 +219,45 @@ export const ApplicationTableHeader: React.FC<ApplicationTableHeaderProps> = ({
           overflow: "scroll",
         }}
       >
-        <TableCell rowSpan={2} sx={{ width: "100px", position: "relative" }}>
+        <TableCell
+          rowSpan={2}
+          sx={{ width: "100px", position: "relative" }}
+          onClick={() => isAvailable && handleSort && handleSort("created_at")}
+        >
           <Box sx={{ cursor: "pointer" }}>
             <Typography.Detail sx={{ fontSize: "16px", lineHeight: "1.5rem" }}>
               {t("application.application_time")}
             </Typography.Detail>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon fieldName="applicationtime" sortBy={sortBy} sortOrder={sortOrder} />
+              <SortIcon fieldName="created_at" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>
-        <TableCell rowSpan={2} sx={{ width: "100px", position: "relative" }}>
+        <TableCell
+          rowSpan={2}
+          sx={{ width: "100px", position: "relative" }}
+          onClick={() => isAvailable && handleSort && handleSort("departure_datetime")}
+        >
           <Box sx={{ cursor: "pointer" }}>
             <Typography.Detail sx={{ fontSize: "16px", lineHeight: "1.5rem" }}>
               {t("application.departure_time")}
             </Typography.Detail>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon fieldName="leavetime" sortBy={sortBy} sortOrder={sortOrder} />
+              <SortIcon fieldName="departure_datetime" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>
-        <TableCell rowSpan={2} sx={{ width: "100px", position: "relative" }}>
+        <TableCell
+          rowSpan={2}
+          sx={{ width: "100px", position: "relative" }}
+          onClick={() => isAvailable && handleSort && handleSort("arrival_datetime")}
+        >
           <Box sx={{ cursor: "pointer" }}>
             <Typography.Detail sx={{ fontSize: "16px", lineHeight: "1.5rem" }}>
               {t("application.return_time")}
             </Typography.Detail>
             <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-              <SortIcon fieldName="returntime" sortBy={sortBy} sortOrder={sortOrder} />
+              <SortIcon fieldName="arrival_datetime" sortBy={sortBy} sortOrder={sortOrder} />
             </Box>
           </Box>
         </TableCell>

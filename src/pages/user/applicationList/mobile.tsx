@@ -1,5 +1,6 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
+import { useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
 import {
@@ -12,18 +13,100 @@ import {
   Typography,
 } from "src/UILibrary"
 import { ApplicationListTable } from "src/components/applicationTable"
-
-import { PAGE_SIZE } from "src/constants/common"
-import { Application } from "src/types/application"
-import { MOCK_APPLICATION_DATA } from "src/pages/teacher/applicationList/mockdata"
 import { StudentSearchBox } from "./components/searchBox"
 
-const applicationData: Application[] = MOCK_APPLICATION_DATA
+import { PAGE_SIZE } from "src/constants/common"
+import { useGetApplicationList } from "src/queries/application"
+import { IApplicationListFilters, IApplicationSorts } from "src/types/application"
+import { getOptimizedApplicationListFilters } from "src/modules/filters"
 
 export const UserApplication: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const [page, setPage] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number>(1)
   const [displayCount, setDisplayCount] = useState<number>(PAGE_SIZE[0])
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const sort = searchParams.get("sort") || ""
+  const sortBy = sort.split(",")[0]
+  const sortOrder = sort.split(",")[1]
+  const student_name = searchParams.get("student_name") || ""
+  const category = searchParams.get("category") || ""
+  const status = searchParams.get("status") || ""
+  const created_at = searchParams.get("created_at") || ""
+  const departure_date = searchParams.get("departure_date") || ""
+  const arrival_date = searchParams.get("arrival_date") || ""
+
+  const {
+    data: applicationData,
+    isLoading,
+    error,
+  } = useGetApplicationList(
+    page,
+    displayCount,
+    "",
+    sort,
+    student_name,
+    category,
+    status,
+    created_at,
+    departure_date,
+    arrival_date
+  )
+
+  const handleSearchParams = (
+    sortBy: string,
+    sortOrder: string,
+    created_at: string,
+    departure_date: string,
+    arrival_date: string
+  ) => {
+    const newSearchParam: Partial<IApplicationSorts> = {}
+    newSearchParam.sort = sortBy + "," + sortOrder
+    if (created_at) {
+      newSearchParam.created_at = created_at
+    }
+    if (departure_date) {
+      newSearchParam.arrival_datetime = departure_date
+    }
+    if (arrival_date) {
+      newSearchParam.arrival_datetime = arrival_date
+    }
+    setSearchParams(newSearchParam, { replace: true })
+  }
+
+  const handleSort = (fieldName: string) => {
+    const newSortOrder =
+      fieldName === sortBy
+        ? sortOrder === "asc"
+          ? "desc"
+          : "asc"
+        : fieldName === ""
+        ? "desc"
+        : "asc"
+    handleSearchParams(fieldName, newSortOrder, created_at, departure_date, arrival_date)
+  }
+
+  const handleFilterChange = (data: IApplicationListFilters) => {
+    const newSearchParam = getOptimizedApplicationListFilters(data)
+    setSearchParams(
+      Object.keys(newSearchParam).reduce(
+        (prev, curr) => ({
+          ...prev,
+          [curr]: newSearchParam[curr as keyof IApplicationListFilters]?.toString(),
+        }),
+        {}
+      ),
+      { replace: true }
+    )
+  }
+
+  useEffect(() => {
+    if (applicationData) {
+      setTotalPages(Math.ceil(applicationData.data.total / displayCount))
+    }
+  }, [displayCount, applicationData])
 
   return (
     <Box
@@ -86,7 +169,18 @@ export const UserApplication: React.FC = () => {
           }}
         >
           <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <StudentSearchBox />
+            <StudentSearchBox
+              initialData={{
+                sort,
+                student_name,
+                category,
+                status,
+                created_at,
+                departure_date,
+                arrival_date,
+              }}
+              handleFilterChange={handleFilterChange}
+            />
           </Box>
           <Box
             sx={{
@@ -97,7 +191,15 @@ export const UserApplication: React.FC = () => {
               gap: "1.125rem",
             }}
           >
-            <Typography.Detail>1~50/500</Typography.Detail>
+            <Typography.Detail>{`${
+              !applicationData?.data.applications.length ? 0 : displayCount * (page - 1) + 1
+            }~${
+              !applicationData?.data.applications.length
+                ? 0
+                : applicationData?.data.applications.length
+            } / ${
+              !applicationData?.data.total ? 0 : applicationData?.data.total
+            }`}</Typography.Detail>
             <Typography.Detail>{t("application.display_count")}</Typography.Detail>
             <Select
               value={displayCount}
@@ -120,10 +222,14 @@ export const UserApplication: React.FC = () => {
           </Box>
         </Box>
         <ApplicationListTable
-          applicationData={applicationData}
-          pagination={{ count: 10, currentPage: 1 }}
-          sortBy=""
-          sortOrder=""
+          applicationData={applicationData?.data.applications || []}
+          onPageNumChange={setPage}
+          pagination={{ count: totalPages, currentPage: page }}
+          isLoading={isLoading}
+          error={error?.message}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          handleSort={handleSort}
         />
       </Box>
     </Box>

@@ -1,5 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router"
 
 import { Button, Box } from "src/UILibrary"
 import { Modal } from "src/components/modal"
@@ -12,8 +13,11 @@ interface ConfirmModalProps {
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({ open, handleConfirmOpen }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
   const handleClose = () => {
     handleConfirmOpen(false)
+    navigate("/application")
   }
 
   return (
@@ -29,6 +33,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({ open, handleConfirmO
         }}
       >
         <Button
+          variant="contained"
           sx={{
             fontWeight: "500",
             lineHeight: "0.875rem",
@@ -36,7 +41,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({ open, handleConfirmO
             color: "background.default",
             p: "0.5625rem 2.375rem",
           }}
-          variant="contained"
+          onClick={handleClose}
         >
           {t("application.back")}
         </Button>

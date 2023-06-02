@@ -52,8 +52,11 @@ export const Login: React.FC = () => {
     const code = searchParams.get("code") || ""
     const role = searchParams.get("state") || ""
     sessionStorage.setItem("code", code)
+    console.log(isMounted.current, code, userState, isLoginRefresh, "life cycle check")
     if (isMounted.current) {
+      console.log(code, userState, isLoginRefresh, "mount check")
       if (code && userState && !isLoginRefresh) {
+        console.log(code, userState, isLoginRefresh, "get code check")
         microSoftCodeLogin({
           role: role,
           code: code,
