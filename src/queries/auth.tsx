@@ -13,7 +13,6 @@ const getLoginLink = (data: UserState) => {
 }
 
 const login = ({ role, code }: { role: string; code: string }) => {
-  console.log(role, code, "query check")
   return getApiClient({
     "Content-Type": "application/json",
   }).post("/v1/auth/login", { role: role, code: code })
