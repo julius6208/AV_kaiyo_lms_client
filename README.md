@@ -2,7 +2,7 @@
 [![linter](https://github.com/viven-inc/react-typescript-template/actions/workflows/linter.yml/badge.svg)](https://github.com/viven-inc/react-typescript-template/actions/workflows/linter.yml)
 
 ## Basic Authentication
-- [1Password Link](https://share.1password.com/s#4OJf9yJ5G1a8KDFJ8FYbKjB5dJfhoLFCZwjaiNES-8Y)
+- [1Password Link](https://share.1password.com/s#HRUsJ956H4Rh1S8hQOae2vocMMB6ni6kHP1cBBhNni4)
 
 ## Microsoft Account Credential
 
@@ -14,7 +14,7 @@
 
 ## Getting Started
 
-1. Download `.env` File from [this link](https://share.1password.com/s#UwHL8Fmkmqq84kW3ICwC5hWA52pUF9KGcox5spxFECk)
+1. Download `.env` File from [this link](https://share.1password.com/s#p9pHwDc16pJFpbSrjDYKILKM49qjKlWcl0qRUJOotHY)
 
 2. In the root directory, please run 
 
