@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { AxiosError, AxiosResponse } from "axios"
 import { useRecoilState } from "recoil"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useSearchParams } from "react-router-dom"
 
-import { Box, Image, Button, Select, MenuItem } from "src/UILibrary"
+import { Box, Image, Button } from "src/UILibrary"
 import { LoadingModal } from "src/components/shared/loadingModal"
 
-import { UserState } from "src/types/user"
 import { ISession } from "src/types/session"
 import { usePushAlerts } from "src/hooks/alerts"
-import { USER_STATE } from "src/constants/userState"
 import { useSession } from "src/modules/sessionProvider"
 import { isLoginRefreshState } from "src/states/provider"
 import { useGetLoginLink, useMicroSoftLogin } from "src/queries/auth"
@@ -23,10 +21,9 @@ export const Login: React.FC = () => {
   const pushAlerts = usePushAlerts()
 
   const [searchParams] = useSearchParams()
-  const [userState, setUserState] = useState<UserState>("teacher")
   const [isLoginRefresh, setIsLoginRefresh] = useRecoilState(isLoginRefreshState)
 
-  const { data: loginLink, error: linkError } = useGetLoginLink(userState)
+  const { data: loginLink, error: linkError } = useGetLoginLink()
 
   const { mutate: microSoftCodeLogin, isLoading } = useMicroSoftLogin({
     onSuccess: (res: AxiosResponse<ISession>) => {
@@ -49,15 +46,13 @@ export const Login: React.FC = () => {
 
   useEffect(() => {
     const code = searchParams.get("code") || ""
-    const role = searchParams.get("state") || ""
     sessionStorage.setItem("code", code)
-    if (code && userState && !isLoginRefresh) {
+    if (code && !isLoginRefresh) {
       microSoftCodeLogin({
-        role: role,
         code: code,
       })
     }
-  }, [isLoginRefresh, microSoftCodeLogin, searchParams, userState])
+  }, [isLoginRefresh, microSoftCodeLogin, searchParams])
 
   return (
     <Box
@@ -72,22 +67,6 @@ export const Login: React.FC = () => {
     >
       <Box sx={{ width: 400, display: "flex", alignItems: "center", flexDirection: "column" }}>
         <Image src={LogoImage} alt="Logo" sx={{ mb: 3 }} />
-        <Select
-          fullWidth
-          sx={{
-            "& .MuiSelect-select": {
-              bgcolor: "background.default",
-            },
-          }}
-          value={userState}
-          onChange={(e) => setUserState(e.target.value as UserState)}
-        >
-          {USER_STATE.map((user) => (
-            <MenuItem key={user.key} value={user.key}>
-              {t(user.label)}
-            </MenuItem>
-          ))}
-        </Select>
         <Button
           fullWidth
           color="primary"
