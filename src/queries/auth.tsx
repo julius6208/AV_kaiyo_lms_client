@@ -1,21 +1,20 @@
 import { useQuery } from "@tanstack/react-query"
 import axios, { AxiosError, AxiosResponse } from "axios"
 
-import { UserState } from "src/types/user"
 import { LoginLink } from "src/types/session"
 import { getApiClient } from "src/modules/axios"
 import { useGetMutation } from "src/modules/mutation"
 
-const getLoginLink = (data: UserState) => {
+const getLoginLink = () => {
   return getApiClient({
     "Content-Type": "application/json",
-  }).get(`/v1/auth/login/${data}`)
+  }).get(`/v1/auth/login/url`)
 }
 
-const login = ({ role, code }: { role: string; code: string }) => {
+const login = ({ code }: { code: string }) => {
   return getApiClient({
     "Content-Type": "application/json",
-  }).post("/v1/auth/login", { role: role, code: code })
+  }).post("/v1/auth/login", { code: code })
 }
 
 const logout = ({ code }: { code: string }) => {
@@ -30,10 +29,8 @@ const refresh = () => {
   }).post("/v1/auth/refresh")
 }
 
-export const useGetLoginLink = (state: UserState) => {
-  return useQuery<AxiosResponse<LoginLink>, AxiosError>(["getLoginLink", state], () =>
-    getLoginLink(state)
-  )
+export const useGetLoginLink = () => {
+  return useQuery<AxiosResponse<LoginLink>, AxiosError>(["getLoginLink"], () => getLoginLink())
 }
 
 export const useRefresh = ({ onSuccess, onError }: { onSuccess: Function; onError: Function }) => {
