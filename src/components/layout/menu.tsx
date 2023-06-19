@@ -22,7 +22,9 @@ import UserIcon from "src/assets/icons/user.svg"
 import ApplicationIcon from "src/assets/icons/application.svg"
 import UsersIcon from "src/assets/icons/users.svg"
 import MealIcon from "src/assets/icons/meal.svg"
-import BuildingIcon from "src/assets/icons/building.svg"
+import PDFIcon from "src/assets/icons/pdf.svg"
+import FolderIcon from "src/assets/icons/folder.svg"
+import SendReceiveIcon from "src/assets/icons/send-receive.svg"
 import LogoImage from "src/assets/imgs/logo_white.png"
 import { ReactComponent as HamburgerIcon } from "src/assets/icons/hamburger.svg"
 
@@ -41,19 +43,56 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
       path: "/mypage",
     },
     {
-      label: "menu.from_parent",
+      icon: ApplicationIcon,
+      label: "menu.application_list",
+      path: "/teacher/application",
+    },
+    {
+      label: "menu.user_list",
       icon: UsersIcon,
-      path: "/application",
+      subMenu: [
+        {
+          label: "menu.students",
+          path: "/teacher/students",
+        },
+        {
+          label: "menu.parents",
+          path: "/teacher/parents",
+        },
+        {
+          label: "menu.faculty_staff",
+          path: "/teacher/staffs",
+        },
+      ],
     },
     {
       label: "menu.meal",
       icon: MealIcon,
-      path: "/meal-list",
+      subMenu: [
+        {
+          label: "menu.meal_management",
+          path: "/teacher/meal-management",
+        },
+        {
+          label: "menu.meal_choices",
+          path: "/teacher/meal-choice",
+        },
+      ],
     },
     {
       label: "menu.pdf_transfer",
-      icon: BuildingIcon,
-      path: "/pdf-transfer",
+      icon: PDFIcon,
+      path: "/teacher/pdf-transfer",
+    },
+    {
+      label: "menu.folder",
+      icon: FolderIcon,
+      path: "/teacher/create-folder",
+    },
+    {
+      label: "menu.send_receive",
+      icon: SendReceiveIcon,
+      path: "/send-receive",
     },
   ])
 
@@ -114,8 +153,18 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
         },
         {
           label: "menu.pdf_transfer",
-          icon: BuildingIcon,
+          icon: PDFIcon,
           path: "/teacher/pdf-transfer",
+        },
+        {
+          label: "menu.folder",
+          icon: FolderIcon,
+          path: "/teacher/create-folder",
+        },
+        {
+          label: "menu.send_receive",
+          icon: SendReceiveIcon,
+          path: "/send-receive",
         },
       ])
     } else if (session?.value.user.role === "student") {
@@ -137,7 +186,7 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
         },
         {
           label: "menu.pdf_transfer",
-          icon: BuildingIcon,
+          icon: PDFIcon,
           path: "/pdf-transfer",
         },
       ])
@@ -160,7 +209,7 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
         },
         {
           label: "menu.pdf_transfer",
-          icon: BuildingIcon,
+          icon: PDFIcon,
           path: "/pdf-transfer",
         },
       ])
