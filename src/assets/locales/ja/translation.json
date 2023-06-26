@@ -261,5 +261,14 @@
     "destination_reflect": "送信先一括反映",
     "forward": "前へ"
   },
+  "send_receive": {
+    "send_status": "送信ステータス",
+    "title": "タイトル",
+    "message": "メッセージ",
+    "send_all": "一斉送信します",
+    "send_receive_management": "送受信管理",
+    "time": "日時",
+    "resend": "再送信"
+  },
   "errors": {}
 }

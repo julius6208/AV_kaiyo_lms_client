@@ -92,7 +92,7 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
     {
       label: "menu.send_receive",
       icon: SendReceiveIcon,
-      path: "/send-receive",
+      path: "/teacher/send-receive",
     },
   ])
 

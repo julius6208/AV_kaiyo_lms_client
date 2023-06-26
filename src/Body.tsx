@@ -23,6 +23,8 @@ import { MealData } from "./pages/mealMaker/mealData"
 import { FetchSession } from "src/modules/sessionProvider"
 import { AuthenticationLayout } from "./components/authenticationLayout"
 import { OCREdit } from "./pages/teacher/pdfTransfer"
+import { SendReceive } from "./pages/teacher/sendReceive"
+import { ReSendEmail } from "./pages/teacher/reSendEmail"
 
 export function Body() {
   return (
@@ -55,6 +57,8 @@ export function Body() {
             <Route path="/teacher/create-folder" element={<CreateFolder />} />
             <Route path="/teacher/create-folder/upload-data" element={<UploadData />} />
             <Route path="/teacher/pdf-transfer" element={<OCREdit />} />
+            <Route path="/teacher/send-receive" element={<SendReceive />} />
+            <Route path="/teacher/send-list" element={<ReSendEmail />} />
             <Route path="/application" element={<UserApplication />} />
             <Route path="/application/:id" element={<UserApplicationDetail />} />
             <Route path="/application/new" element={<NewApply />} />

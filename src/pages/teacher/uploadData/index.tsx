@@ -106,6 +106,7 @@ export const UploadData: React.FC = () => {
           <UploadTable
             fields={fields}
             content={mockUploadData || []}
+            checkable
             pagination={{ count: 160, currentPage: 1 }}
           />
         </Box>
