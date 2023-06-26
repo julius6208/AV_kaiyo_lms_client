@@ -46,6 +46,7 @@ interface AdvancedTableParams<T> {
     count: number
     currentPage: number
   }
+  checkable?: boolean
   // eslint-disable-next-line no-unused-vars
   onPageNumChange?: (value: number) => void
   isLoading?: boolean
@@ -58,6 +59,7 @@ export const UploadTable = <T extends Record<string, any>>({
   idField = "id",
   variant = "pagination",
   pagination,
+  checkable,
   onPageNumChange,
   isLoading = false,
   error,
@@ -92,7 +94,7 @@ export const UploadTable = <T extends Record<string, any>>({
               overflow: "scroll",
             }}
           >
-            <TableCell sx={{ width: 22 }}></TableCell>
+            {checkable && <TableCell sx={{ width: 22 }}></TableCell>}
             {fields.map((field) => (
               <TableCell key={field.label} sx={{ width: field.width, position: "relative" }}>
                 {t(field.label)}
@@ -128,16 +130,18 @@ export const UploadTable = <T extends Record<string, any>>({
                   },
                 }}
               >
-                <TableCell>
-                  <Checkbox
-                    sx={{
-                      p: 0,
-                    }}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      handleChecked(event.target.checked, row[idField])
-                    }
-                  />
-                </TableCell>
+                {checkable && (
+                  <TableCell>
+                    <Checkbox
+                      sx={{
+                        p: 0,
+                      }}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        handleChecked(event.target.checked, row[idField])
+                      }
+                    />
+                  </TableCell>
+                )}
                 {fields.map((f) => (
                   <TableCell
                     key={`cell-${f.attribute}`}
