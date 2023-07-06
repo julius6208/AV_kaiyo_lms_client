@@ -11,6 +11,7 @@ import { Application } from "src/types/application"
 import { usePushAlerts } from "src/hooks/alerts"
 import { useApproveApplication } from "src/queries/application"
 import { formattedDate } from "src/modules/date"
+import { useSession } from "src/modules/sessionProvider"
 
 interface ApplicationModalProps {
   open: boolean
@@ -28,6 +29,7 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
   handleDenyOpen,
 }) => {
   const { t } = useTranslation()
+  const session = useSession()
   const queryClient = useQueryClient()
   const pushAlerts = usePushAlerts()
 
@@ -53,7 +55,7 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
   const onApproveApplication = () => {
     approveApplication({
       data: application?.student_id,
-      token: "",
+      token: session?.value.tokenInfo.id_token || "",
     })
   }
 
