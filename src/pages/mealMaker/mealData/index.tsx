@@ -9,236 +9,63 @@ import { MealDetailModal } from "src/pages/user/mealDetail"
 import { ConfirmModal } from "./components/confirmModal"
 import { UploadModal } from "./components/uploadModal"
 
-import { MOCK_MEAL_DETAIL_DATA } from "src/pages/user/mealDetail/mockMedalDetail"
-import { MOCK_MEAL_DATA } from "src/pages/user/mealList/mockmeal"
-
-import { Meal } from "src/types/meal"
-
-const mealData: Meal[] = MOCK_MEAL_DATA
-
-const fields: FieldDefinition<Meal>[] = [
-  {
-    attribute: "date",
-    label: "meal.date",
-    width: 136,
-  },
-  {
-    attribute: "breakfast",
-    label: "meal.breakfast",
-    widget: () => (
-      <Box>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[0].menu_name}
-        </Typography.Action>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[1].menu_name}
-        </Typography.Action>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[2].menu_name}
-        </Typography.Action>
-      </Box>
-    ),
-  },
-  {
-    attribute: "lunch",
-    label: "meal.lunch",
-    widget: () => (
-      <Box>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[0].menu_name}
-        </Typography.Action>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[1].menu_name}
-        </Typography.Action>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[2].menu_name}
-        </Typography.Action>
-      </Box>
-    ),
-  },
-  {
-    attribute: "dinner_a",
-    label: "meal.dinner_a",
-    widget: () => (
-      <Box>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[0].menu_name}
-        </Typography.Action>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[1].menu_name}
-        </Typography.Action>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[2].menu_name}
-        </Typography.Action>
-      </Box>
-    ),
-  },
-  {
-    attribute: "dinner_b",
-    label: "meal.dinner_b",
-    widget: () => (
-      <Box>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[0].menu_name}
-        </Typography.Action>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[1].menu_name}
-        </Typography.Action>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[2].menu_name}
-        </Typography.Action>
-      </Box>
-    ),
-  },
-  {
-    attribute: "dinner_c",
-    label: "meal.dinner_c",
-    widget: () => (
-      <Box>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[0].menu_name}
-        </Typography.Action>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[1].menu_name}
-        </Typography.Action>
-        <Typography.Action
-          sx={{
-            textAlign: "start",
-            fontSize: "18px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {MOCK_MEAL_DETAIL_DATA[2].menu_name}
-        </Typography.Action>
-      </Box>
-    ),
-  },
-  {
-    attribute: "other",
-    label: "user_list.other",
-  },
-]
+import { MealList, SelectMeal } from "src/types/meal"
+import { useGetUserMealList } from "src/queries/meal"
+import { useSession } from "src/modules/sessionProvider"
+import { formatDate } from "src/modules/date"
 
 export const MealData: React.FC = () => {
   const { t } = useTranslation()
+  const session = useSession()
+
   const [mealDate, setMealDate] = useState<string>(new Date().toString())
   const [mealDetailModalOpen, setMealDetailModalOpen] = useState<boolean>(false)
   const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false)
   const [uploadModalOpen, setUploadModalOpen] = useState<boolean>(false)
+  const [selectMeal, setSelectMeal] = useState<SelectMeal[]>([])
+  const [mealId, setMealId] = useState<number>(0)
+  const mealMonth = formatDate(mealDate, "yyyy-MM")
+
+  const {
+    data: mealList,
+    isLoading,
+    error,
+  } = useGetUserMealList(session?.value.tokenInfo.id_token || "", mealMonth)
+
+  const fields: FieldDefinition<MealList>[] = [
+    {
+      attribute: "date",
+      label: "meal.date",
+      width: 136,
+      color: "background.paper",
+    },
+    {
+      attribute: "breakfast",
+      label: "meal.breakfast",
+    },
+    {
+      attribute: "lunch",
+      label: "meal.lunch",
+    },
+    {
+      attribute: "dinner_a",
+      label: "meal.dinner_a",
+    },
+    {
+      attribute: "dinner_b",
+      label: "meal.dinner_b",
+    },
+    {
+      attribute: "dinner_c",
+      label: "meal.dinner_c",
+    },
+    {
+      attribute: "other",
+      label: "user_list.other",
+      color: "background.paper",
+    },
+  ]
+
   return (
     <Box
       sx={{
@@ -327,11 +154,21 @@ export const MealData: React.FC = () => {
             </Button>
           </Box>
         </Box>
-        <MealTable fields={fields} content={mealData} onDetail={setMealDetailModalOpen} />
+        <MealTable
+          fields={fields}
+          content={mealList?.data.meals || []}
+          isLoading={isLoading}
+          error={error?.message}
+          handleMealDetailOpen={setMealDetailModalOpen}
+          selectMeal={selectMeal}
+          setSelectMeal={setSelectMeal}
+          setMealId={setMealId}
+        />
       </Box>
       <ConfirmModal open={confirmModalOpen} handleWarningOpen={setConfirmModalOpen} />
       <UploadModal open={uploadModalOpen} handleUploadOpen={setUploadModalOpen} />
       <MealDetailModal
+        mealId={mealId}
         open={mealDetailModalOpen}
         handleMealDetailOpen={setMealDetailModalOpen}
         mealDate={mealDate}

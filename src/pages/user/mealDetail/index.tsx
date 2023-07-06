@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { FieldDefinition } from "src/components/mealTable"
@@ -7,21 +7,22 @@ import { Box, Button, DialogTitle, IconButton, Typography } from "src/UILibrary"
 import { MealDetailTable } from "src/components/mealDetailTable"
 import { CloseIcon } from "src/assets/icons/CloseIcon"
 
-import { MealDetail } from "src/types/mealDetail"
-import { MOCK_MEAL_DETAIL_DATA } from "./mockMedalDetail"
-
-const mealDetailData: MealDetail[] = MOCK_MEAL_DETAIL_DATA
+import { useGetMealDetail } from "src/queries/meal"
+import { Meals, Menu } from "src/types/meal"
+import { AxiosError, AxiosResponse } from "axios"
+import { useSession } from "src/modules/sessionProvider"
 
 interface ApplicationModalProps {
+  mealId: number
   open: boolean
   // eslint-disable-next-line no-unused-vars
   handleMealDetailOpen: (open: boolean) => void
   mealDate: string
 }
 
-const fields: FieldDefinition<MealDetail>[] = [
+const fields: FieldDefinition<Menu>[] = [
   {
-    attribute: "menu_name",
+    attribute: "title",
     label: "meal.menu_name",
     width: 200,
   },
@@ -38,20 +39,41 @@ const fields: FieldDefinition<MealDetail>[] = [
     label: "meal.lipid",
   },
   {
-    attribute: "salt",
+    attribute: "saltiness",
     label: "meal.salt",
   },
 ]
 
 export const MealDetailModal: React.FC<ApplicationModalProps> = ({
+  mealId,
   open,
   handleMealDetailOpen,
   mealDate,
 }) => {
   const { t } = useTranslation()
+  const session = useSession()
+
   const getYear = new Date(mealDate).getFullYear()
   const getMonth = new Date(mealDate).getMonth()
   const getDay = new Date(mealDate).getDate()
+
+  const [mealDetailData, setMealDetailData] = useState<Meals>()
+  const [error, setError] = useState<string>("")
+
+  const { mutate: getDetailData, isLoading } = useGetMealDetail({
+    onSuccess: (res: AxiosResponse<Meals>) => {
+      setMealDetailData(res.data)
+    },
+    onError: (err: AxiosError) => {
+      setError(err.message)
+    },
+  })
+
+  useEffect(() => {
+    if (mealId !== 0) {
+      getDetailData({ token: session?.value.tokenInfo.id_token || "", id: mealId })
+    }
+  }, [getDetailData, mealId, session])
 
   const handleClose = () => {
     handleMealDetailOpen(false)
@@ -112,7 +134,12 @@ export const MealDetailModal: React.FC<ApplicationModalProps> = ({
           </Button>
         </Box>
       </DialogTitle>
-      <MealDetailTable fields={fields} content={mealDetailData} />
+      <MealDetailTable
+        fields={fields}
+        content={mealDetailData?.menus || []}
+        isLoading={isLoading}
+        error={error}
+      />
     </Modal>
   )
 }
