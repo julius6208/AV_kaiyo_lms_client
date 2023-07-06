@@ -20,6 +20,7 @@ import { getOptimizedTeacherListFilters } from "src/modules/filters"
 import { ITeacherListFilters, ITeacherSorts, Teacher } from "src/types/teacher"
 import { useGetTeacherList } from "src/queries/teacher"
 import { useGetExportTeacherList } from "src/queries/teacher"
+import { useSession } from "src/modules/sessionProvider"
 
 const fields: FieldDefinition<Teacher>[] = [
   {
@@ -62,6 +63,8 @@ const fields: FieldDefinition<Teacher>[] = [
 
 export const StaffList: React.FC = () => {
   const { t } = useTranslation()
+  const session = useSession()
+
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
   const [displayCount, setDisplayCount] = useState<number>(PAGE_SIZE[0])
@@ -79,7 +82,16 @@ export const StaffList: React.FC = () => {
     data: teacherData,
     isLoading,
     error,
-  } = useGetTeacherList(page, displayCount, "", sort, ids, fullName, fullNameKana, types)
+  } = useGetTeacherList(
+    page,
+    displayCount,
+    session?.value.tokenInfo.id_token || "",
+    sort,
+    ids,
+    fullName,
+    fullNameKana,
+    types
+  )
 
   const { data: teacherExportData } = useGetExportTeacherList("")
 

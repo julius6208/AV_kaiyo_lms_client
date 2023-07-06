@@ -16,7 +16,7 @@ import { UploadData } from "./pages/teacher/uploadData"
 import { UserApplication } from "src/pages/user/applicationList"
 import { UserApplicationDetail } from "./pages/user/applicationDetail"
 import { NewApply } from "src/pages/user/newApply"
-import { MealList } from "./pages/user/mealList"
+import { UserMealList } from "./pages/user/mealList"
 import { MealExpense } from "./pages/mealMaker/mealExpense"
 import { MealData } from "./pages/mealMaker/mealData"
 
@@ -62,7 +62,7 @@ export function Body() {
             <Route path="/application" element={<UserApplication />} />
             <Route path="/application/:id" element={<UserApplicationDetail />} />
             <Route path="/application/new" element={<NewApply />} />
-            <Route path="/meal-list" element={<MealList />} />
+            <Route path="/meal-list" element={<UserMealList />} />
             <Route path="/meal/meal-data" element={<MealData />} />
             <Route path="/meal/meal-expense" element={<MealExpense />} />
           </Route>
