@@ -8,6 +8,7 @@ import { Modal } from "src/components/modal"
 
 import { usePushAlerts } from "src/hooks/alerts"
 import { useRejectApplication } from "src/queries/application"
+import { useSession } from "src/modules/sessionProvider"
 
 interface DenyModalProps {
   open: boolean
@@ -18,6 +19,7 @@ interface DenyModalProps {
 
 export const DenyModal: React.FC<DenyModalProps> = ({ open, handleDenyOpen, registNumber }) => {
   const { t } = useTranslation()
+  const session = useSession()
   const queryClient = useQueryClient()
   const pushAlerts = usePushAlerts()
   const [rejectReason, setRejectReason] = useState<string>("")
@@ -39,7 +41,7 @@ export const DenyModal: React.FC<DenyModalProps> = ({ open, handleDenyOpen, regi
   const onRejectApplication = () => {
     rejectApplication({
       id: registNumber,
-      token: "",
+      token: session?.value.tokenInfo.id_token || "",
       data: { reason: rejectReason },
     })
   }
