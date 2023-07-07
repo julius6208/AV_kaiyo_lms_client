@@ -19,9 +19,11 @@ import {
 } from "src/types/application"
 import { useGetApplicationList } from "src/queries/application"
 import { getOptimizedApplicationListFilters } from "src/modules/filters"
+import { useSession } from "src/modules/sessionProvider"
 
 export const TeacherApplication: React.FC = () => {
   const { t } = useTranslation()
+  const session = useSession()
   const navigate = useNavigate()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
@@ -51,7 +53,7 @@ export const TeacherApplication: React.FC = () => {
   } = useGetApplicationList(
     page,
     displayCount,
-    "",
+    session?.value.tokenInfo.id_token || "",
     sort,
     student_name,
     category,

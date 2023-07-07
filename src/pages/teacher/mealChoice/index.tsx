@@ -7,15 +7,15 @@ import {
   AdapterDateFns,
   Box,
   Button,
+  Checkbox,
+  CircleIcon,
   DatePicker,
   FormControl,
-  FormControlLabel,
   IconButton,
+  ListItemText,
   LocalizationProvider,
   MenuItem,
-  Popover,
-  Radio,
-  RadioGroup,
+  RadioButtonUncheckedIcon,
   Select,
   TextField,
   Typography,
@@ -80,16 +80,17 @@ const fields: FieldDefinition<MealSkip>[] = [
 export const MealChoice: React.FC = () => {
   const { t } = useTranslation()
   const [mockCount, setMockCount] = useState<number>(0)
-  const [anchorE1, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
-  const [anchorE2, setAnchorE2] = React.useState<HTMLButtonElement | null>(null)
-  const [anchorE3, setAnchorE3] = React.useState<HTMLButtonElement | null>(null)
-  const [anchorE4, setAnchorE4] = React.useState<HTMLButtonElement | null>(null)
   const [startDate, setStartDate] = useState<string | null>()
   const [endDate, setEndDate] = useState<string | null>()
   const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false)
   const [edit, setEdit] = useState<boolean>(false)
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false)
   const [warningModalOpen, setWarningModalOpen] = useState<boolean>(false)
+
+  const [grades, setGrades] = useState<number[]>([])
+  const [learningGs, setLearningGs] = useState<number[]>([])
+  const [dormitories, setDormitories] = useState<string[]>([])
+  const [clubs, setClubs] = useState<number[]>([])
 
   const confirmCount = () => {
     if (mockCount > 1) {
@@ -101,42 +102,6 @@ export const MealChoice: React.FC = () => {
     }
   }
 
-  const handleClick1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClick2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorE2(event.currentTarget)
-  }
-
-  const handleClick3 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorE3(event.currentTarget)
-  }
-
-  const handleClick4 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorE4(event.currentTarget)
-  }
-
-  const handleClose1 = () => {
-    setAnchorEl(null)
-  }
-
-  const handleClose2 = () => {
-    setAnchorE2(null)
-  }
-
-  const handleClose3 = () => {
-    setAnchorE3(null)
-  }
-
-  const handleClose4 = () => {
-    setAnchorE4(null)
-  }
-
-  const open1 = Boolean(anchorE1)
-  const open2 = Boolean(anchorE2)
-  const open3 = Boolean(anchorE3)
-  const open4 = Boolean(anchorE4)
   return (
     <Box
       sx={{
@@ -286,218 +251,147 @@ export const MealChoice: React.FC = () => {
             <Box display="flex" flexDirection="column" sx={{ gap: "1.25rem" }}>
               <Box>
                 <Typography.Action>{t("user_list.grade_section")}</Typography.Action>
-                <Button onClick={handleClick1} sx={{ width: "100px", p: 0 }}>
+                <FormControl sx={{ width: "100px" }}>
                   <Select
-                    disabled
                     sx={{
-                      width: "100px",
                       "& .MuiSelect-select": {
                         bgcolor: "background.default",
                       },
                     }}
-                  ></Select>
-                </Button>
-                <Popover
-                  open={open1}
-                  anchorEl={anchorE1}
-                  onClose={handleClose1}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  PaperProps={{
-                    sx: {
-                      width: "100px",
-                      boxShadow: "none",
-                    },
-                  }}
-                >
-                  {new Array(6).fill(0).map((_, index) => (
-                    <Box key={index} sx={{ px: "0.5rem" }}>
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="demo-radio-buttons-group-label"
-                          name="radio-buttons-group"
-                        >
-                          <FormControlLabel
-                            value={index + 1}
-                            control={
-                              <Radio
-                                sx={{
-                                  "& .MuiSvgIcon-root": {
-                                    fontSize: "12px",
-                                  },
-                                }}
-                              />
-                            }
-                            label={index + 1}
-                          />
-                        </RadioGroup>
-                      </FormControl>
-                    </Box>
-                  ))}
-                </Popover>
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={grades}
+                    onChange={(e) => setGrades(e.target.value as number[])}
+                    renderValue={(selected: any) => selected.join(",")}
+                  >
+                    {new Array(6).fill(0).map((_, index) => (
+                      <MenuItem key={index} value={index + 1}>
+                        <Checkbox
+                          sx={{
+                            "& .MuiSvgIcon-root": {
+                              fontSize: "12px",
+                            },
+                          }}
+                          checked={grades.includes(index + 1)}
+                          icon={<RadioButtonUncheckedIcon />}
+                          checkedIcon={<CircleIcon />}
+                        />
+                        <ListItemText primary={index + 1} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Box>
               <Box>
                 <Typography.Action>{t("user_list.class_section")}</Typography.Action>
-                <Button onClick={handleClick2} sx={{ width: "100px", p: 0 }}>
+                <FormControl sx={{ width: "100px" }}>
                   <Select
-                    disabled
                     sx={{
-                      width: "100px",
                       "& .MuiSelect-select": {
                         bgcolor: "background.default",
                       },
                     }}
-                  ></Select>
-                </Button>
-                <Popover
-                  open={open2}
-                  anchorEl={anchorE2}
-                  onClose={handleClose2}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  PaperProps={{
-                    sx: {
-                      width: "100px",
-                      boxShadow: "none",
-                    },
-                  }}
-                >
-                  {new Array(4).fill(0).map((_, index) => (
-                    <Box key={index} sx={{ px: "0.5rem" }}>
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="demo-radio-buttons-group-label"
-                          name="radio-buttons-group"
-                        >
-                          <FormControlLabel
-                            value={index + 1}
-                            control={
-                              <Radio
-                                sx={{
-                                  "& .MuiSvgIcon-root": {
-                                    fontSize: "12px",
-                                  },
-                                }}
-                              />
-                            }
-                            label={index + 1}
-                          />
-                        </RadioGroup>
-                      </FormControl>
-                    </Box>
-                  ))}
-                </Popover>
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={learningGs}
+                    onChange={(e) => setLearningGs(e.target.value as number[])}
+                    renderValue={(selected: any) => selected.join(",")}
+                  >
+                    {new Array(4).fill(0).map((_, index) => (
+                      <MenuItem key={index} value={index + 1}>
+                        <Checkbox
+                          sx={{
+                            "& .MuiSvgIcon-root": {
+                              fontSize: "12px",
+                            },
+                          }}
+                          checked={learningGs.includes(index + 1)}
+                          icon={<RadioButtonUncheckedIcon />}
+                          checkedIcon={<CircleIcon />}
+                        />
+                        <ListItemText primary={index + 1} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Box>
               <Box>
                 <Typography.Action>{t("user_list.house_section")}</Typography.Action>
-                <Button onClick={handleClick3} sx={{ width: "100px", p: 0 }}>
+                <FormControl sx={{ width: "100px" }}>
                   <Select
-                    disabled
                     sx={{
-                      width: "100px",
                       "& .MuiSelect-select": {
                         bgcolor: "background.default",
                       },
                     }}
-                  ></Select>
-                </Button>
-                <Popover
-                  open={open3}
-                  anchorEl={anchorE3}
-                  onClose={handleClose3}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  PaperProps={{
-                    sx: {
-                      width: "100px",
-                      boxShadow: "none",
-                    },
-                  }}
-                >
-                  {HOUSE.map((house, index) => (
-                    <Box key={index} sx={{ px: "0.5rem" }}>
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="demo-radio-buttons-group-label"
-                          name="radio-buttons-group"
-                        >
-                          <FormControlLabel
-                            value={house}
-                            control={
-                              <Radio
-                                sx={{
-                                  "& .MuiSvgIcon-root": {
-                                    fontSize: "12px",
-                                  },
-                                }}
-                              />
-                            }
-                            label={t(house)}
-                          />
-                        </RadioGroup>
-                      </FormControl>
-                    </Box>
-                  ))}
-                </Popover>
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={dormitories}
+                    onChange={(e) => setDormitories(e.target.value as string[])}
+                    renderValue={(selected: any) => selected.join(",")}
+                  >
+                    {HOUSE.map((house, index) => (
+                      <MenuItem key={index} value={house}>
+                        <Checkbox
+                          sx={{
+                            "& .MuiSvgIcon-root": {
+                              fontSize: "12px",
+                            },
+                          }}
+                          checked={dormitories.includes(house)}
+                          icon={<RadioButtonUncheckedIcon />}
+                          checkedIcon={<CircleIcon />}
+                        />
+                        <ListItemText primary={t(house)} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Box>
               <Box>
                 <Typography.Action>{t("user_list.extra_activity_section")}</Typography.Action>
-                <Button onClick={handleClick4} sx={{ width: "200px", p: 0 }}>
+                <FormControl sx={{ width: "250px" }}>
                   <Select
-                    disabled
                     sx={{
-                      width: "200px",
                       "& .MuiSelect-select": {
                         bgcolor: "background.default",
                       },
                     }}
-                  ></Select>
-                </Button>
-                <Popover
-                  open={open4}
-                  anchorEl={anchorE4}
-                  onClose={handleClose4}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  PaperProps={{
-                    sx: {
-                      boxShadow: "none",
-                    },
-                  }}
-                >
-                  {EXTRA_ACTIVITY_LIST.map((activityList) => (
-                    <Box key={activityList.key} sx={{ px: "0.5rem" }}>
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="demo-radio-buttons-group-label"
-                          name="radio-buttons-group"
-                        >
-                          <FormControlLabel
-                            value={activityList.key}
-                            control={
-                              <Radio
-                                sx={{
-                                  "& .MuiSvgIcon-root": {
-                                    fontSize: "12px",
-                                  },
-                                }}
-                              />
-                            }
-                            label={t(activityList.label)}
-                          />
-                        </RadioGroup>
-                      </FormControl>
-                    </Box>
-                  ))}
-                </Popover>
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={clubs}
+                    onChange={(e) => setClubs(e.target.value as number[])}
+                    renderValue={(selected: any) =>
+                      selected
+                        .map((key: number) => {
+                          return t(
+                            `${EXTRA_ACTIVITY_LIST.find((element) => element.key === key)?.label}`
+                          )
+                        })
+                        .join(",")
+                    }
+                  >
+                    {EXTRA_ACTIVITY_LIST.map((activityList) => (
+                      <MenuItem key={activityList.key} value={activityList.key}>
+                        <Checkbox
+                          sx={{
+                            "& .MuiSvgIcon-root": {
+                              fontSize: "12px",
+                            },
+                          }}
+                          checked={clubs.includes(activityList.key)}
+                          icon={<RadioButtonUncheckedIcon />}
+                          checkedIcon={<CircleIcon />}
+                        />
+                        <ListItemText primary={t(activityList.label)} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Box>
             </Box>
             <Button

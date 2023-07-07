@@ -8,6 +8,7 @@ import { Modal } from "src/components/modal"
 
 import { usePushAlerts } from "src/hooks/alerts"
 import { useApproveApplications } from "src/queries/application"
+import { useSession } from "src/modules/sessionProvider"
 
 interface ApplicationModalProps {
   open: boolean
@@ -22,6 +23,7 @@ export const MultipleApproveModal: React.FC<ApplicationModalProps> = ({
   checkedApplicationIds,
 }) => {
   const { t } = useTranslation()
+  const session = useSession()
   const queryClient = useQueryClient()
   const pushAlerts = usePushAlerts()
 
@@ -42,7 +44,7 @@ export const MultipleApproveModal: React.FC<ApplicationModalProps> = ({
   const onApproveApplications = () => {
     approveApplications({
       ids: checkedApplicationIds,
-      token: "",
+      token: session?.value.tokenInfo.id_token || "",
     })
   }
 

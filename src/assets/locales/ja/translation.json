@@ -50,6 +50,8 @@
     "meal_management": "喫食管理",
     "meal_choices": "喫食選択",
     "pdf_transfer": "PDF個別送信",
+    "folder": "フォルダ作成",
+    "send_receive": "送受信管理",
     "from_parent": "保護者からの申請",
     "from_student": "生徒からの申請",
     "eating_management": "喫食データ管理",
@@ -213,9 +215,10 @@
     "lipid": "脂質",
     "salt": "塩分",
     "check_detail": "詳細を確認する",
-    "detail": "詳細確認", 
+    "detail": "詳細確認",
     "total_amount": "当月合計金額",
     "yen": "円",
+    "meal_num": "件",
     "morning": "朝",
     "noon": "昼",
     "evening": "夕",
@@ -241,6 +244,41 @@
     "select_file": "ファイルを選択",
     "history": "喫食履歴",
     "history_detail": "教職員喫食履歴詳細"
+  },
+  "create_folder": {
+    "multitle_delete": "一括削除",
+    "bulk_delete": "一括削除しますか？",
+    "new_folder": "新規フォルダ作成",
+    "confirm": "確認する",
+    "save": "保存",
+    "edit": "編集",
+    "remove": "削除",
+    "folder_remove": "フォルダを削除してもよろしいですか?",
+    "folder_edit": "フォルダーを編集する",
+    "recipient": "送信先",
+    "to_upload": "アップロードする",
+    "file_number": "ファイル数",
+    "new_upload": "新規ファイルアップロード",
+    "destination_reflect": "送信先一括反映",
+    "forward": "前へ"
+  },
+  "send_receive": {
+    "send_status": "送信ステータス",
+    "title": "タイトル",
+    "message": "メッセージ",
+    "send_all": "一斉送信します",
+    "send_receive_management": "送受信管理",
+    "time": "日時",
+    "resend": "再送信"
+  },
+  "day": {
+    "Monday": "月",
+    "Tuesday": "火",
+    "Wednesday": "水",
+    "Thursday": "木",
+    "Friday": "金",
+    "Saturday": "土",
+    "Sunday": "日"
   },
   "errors": {}
 }

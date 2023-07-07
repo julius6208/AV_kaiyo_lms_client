@@ -11,9 +11,11 @@ import { StudentSearchBox } from "./components/searchBox"
 import { useGetApplicationList } from "src/queries/application"
 import { IApplicationListFilters, IApplicationSorts } from "src/types/application"
 import { getOptimizedApplicationListFilters } from "src/modules/filters"
+import { useSession } from "src/modules/sessionProvider"
 
 export const UserApplication: React.FC = () => {
   const { t } = useTranslation()
+  const session = useSession()
   const navigate = useNavigate()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
@@ -37,7 +39,7 @@ export const UserApplication: React.FC = () => {
   } = useGetApplicationList(
     page,
     displayCount,
-    "",
+    session?.value.tokenInfo.id_token || "",
     sort,
     student_name,
     category,

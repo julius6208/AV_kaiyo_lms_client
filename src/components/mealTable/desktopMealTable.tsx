@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import {
@@ -11,25 +11,21 @@ import {
   TableRow,
   Typography,
   Pagination,
+  CircularProgress,
+  Checkbox,
 } from "src/UILibrary"
+
+import { formatDate, getDay } from "src/modules/date"
+import { Meals, Menu } from "src/types/meal"
 import { useSession } from "src/modules/sessionProvider"
+import { SelectMeal } from "src/types/meal"
 
 export interface FieldDefinition<T> {
   attribute: string
   label: string
   width?: number
+  color?: string
   widget?: React.FC<{ value?: any; row?: T }>
-}
-
-function getProperty(obj: any, field: string): any {
-  let value = obj
-  let attrs = field.split(".")
-  let f = attrs.shift()
-  while (value && f) {
-    value = value[f]
-    f = attrs.shift()
-  }
-  return value
 }
 
 interface AdvancedTableParams<T> {
@@ -41,6 +37,11 @@ interface AdvancedTableParams<T> {
     count: number
     currentPage: number
   }
+  isLoading?: boolean
+  error?: string
+  selectMeal: SelectMeal[]
+  setSelectMeal: Function
+  setMealId?: Function
   onDetail?: Function
 }
 
@@ -50,13 +51,46 @@ export const MealTable = <T extends Record<string, any>>({
   idField = "id",
   variant = "pagination",
   pagination,
+  isLoading = false,
+  error,
+  selectMeal,
+  setSelectMeal,
+  setMealId,
   onDetail,
 }: AdvancedTableParams<T>) => {
   const { t } = useTranslation()
   const session = useSession()
-  const handleDetail = () => {
-    onDetail && onDetail(true)
+
+  const handleChange = (mealId: number, status: boolean) => {
+    const existingItem = selectMeal.find((item) => item.mealId === mealId)
+
+    if (existingItem) {
+      const updatedSelectMeal = selectMeal.map((item) =>
+        item.mealId === mealId ? { ...item, status } : item
+      )
+      setSelectMeal(updatedSelectMeal)
+    } else {
+      setSelectMeal([...selectMeal, { mealId, status }])
+    }
   }
+
+  const handleDetail = (mealId: number) => {
+    onDetail && onDetail(true)
+    setMealId && setMealId(mealId)
+  }
+
+  const initialMeal: SelectMeal[] = useMemo(() => {
+    return content.flatMap((item) =>
+      item.meals.map((meal: Meals) => ({
+        mealId: meal.id,
+        status: meal.selected,
+      }))
+    )
+  }, [content])
+
+  useEffect(() => {
+    setSelectMeal(initialMeal)
+  }, [initialMeal, setSelectMeal])
 
   return (
     <TableContainer sx={{ mt: "1.6875rem" }}>
@@ -107,14 +141,34 @@ export const MealTable = <T extends Record<string, any>>({
                 },
               }}
             >
-              {fields.map((f, index) => (
-                <TableCell
-                  key={`cell-${f.attribute}`}
+              <TableCell>
+                <Box
                   sx={{
-                    bgcolor: "background.paper",
-                    width: f.width,
+                    height: "85px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
                   }}
                 >
+                  <Typography.Action
+                    sx={{
+                      fontSize: "18px",
+                      fontWeight: 400,
+                      whiteSpace: "nowrap",
+                      lineHeight: "24px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {formatDate(row.date, "MM/dd") +
+                      " (" +
+                      t(`day.${getDay(row.date.toString())}`) +
+                      ")"}
+                  </Typography.Action>
+                </Box>
+              </TableCell>
+              {session?.value.user.role === "teacher" && (
+                <TableCell>
                   <Box
                     sx={{
                       height: "85px",
@@ -123,57 +177,445 @@ export const MealTable = <T extends Record<string, any>>({
                       justifyContent: "space-around",
                     }}
                   >
-                    {f.widget ? (
-                      f.widget({ value: getProperty(row, f.attribute), row: row })
-                    ) : (
+                    <Box sx={{ display: "flex" }}>
                       <Typography.Action
                         sx={{
+                          textAlign: "start",
                           fontSize: "18px",
-                          fontWeight: 400,
                           whiteSpace: "nowrap",
-                          lineHeight: "24px",
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                         }}
                       >
-                        {getProperty(row, f.attribute)}
+                        {t("meal.morning")}
                       </Typography.Action>
-                    )}
-                    {session?.value.user.role === "teacher" && index !== 0 && index !== 1 && (
-                      <Typography.Detail
-                        onClick={handleDetail}
+                      <Checkbox
+                        checked={
+                          selectMeal.find(
+                            (element: SelectMeal) =>
+                              element.mealId ===
+                              row.meals.find((item: Meals) => item.type === "Breakfast")?.id
+                          )?.status || false
+                        }
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleChange(
+                            row.meals.find((item: Meals) => item.type === "Breakfast").id,
+                            e.target.checked
+                          )
+                        }
+                        sx={{ p: 0, mx: "auto", "& .MuiSvgIcon-root": { fontSize: "1.25rem" } }}
+                      />
+                    </Box>
+                    <Box sx={{ display: "flex" }}>
+                      <Typography.Action
                         sx={{
-                          width: "100%",
-                          cursor: "pointer",
-                          fontSize: "10px",
-                          color: "secondary.dark",
-                          lineHeight: "0.625rem",
+                          textAlign: "start",
+                          fontSize: "18px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
                         }}
                       >
-                        {t("meal.check_detail")}
-                      </Typography.Detail>
-                    )}
-                    {session?.value.user.role !== "teacher" && index !== 0 && (
-                      <Typography.Detail
-                        onClick={handleDetail}
+                        {t("meal.noon")}
+                      </Typography.Action>
+                      <Checkbox
+                        checked={
+                          selectMeal.find(
+                            (element: SelectMeal) =>
+                              element.mealId ===
+                              row.meals.find((item: Meals) => item.type === "Lunch")?.id
+                          )?.status || false
+                        }
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleChange(
+                            row.meals.find((item: Meals) => item.type === "Lunch").id,
+                            e.target.checked
+                          )
+                        }
+                        sx={{ p: 0, m: "auto", "& .MuiSvgIcon-root": { fontSize: "1.25rem" } }}
+                      />
+                    </Box>
+                    <Box sx={{ display: "flex" }}>
+                      <Typography.Action
                         sx={{
-                          width: "100%",
-                          cursor: "pointer",
-                          fontSize: "10px",
-                          color: "secondary.dark",
-                          lineHeight: "0.625rem",
+                          textAlign: "start",
+                          fontSize: "18px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
                         }}
                       >
-                        {t("meal.check_detail")}
-                      </Typography.Detail>
-                    )}
+                        {t("meal.evening")}
+                      </Typography.Action>
+                      <Checkbox
+                        checked={
+                          selectMeal.find(
+                            (element: SelectMeal) =>
+                              element.mealId ===
+                              row.meals.find(
+                                (item: Meals) =>
+                                  item.type === "DinnerA" ||
+                                  item.type === "DinnerB" ||
+                                  item.type === "DinnerC"
+                              )?.id
+                          )?.status || false
+                        }
+                        sx={{ p: 0, m: "auto", "& .MuiSvgIcon-root": { fontSize: "1.25rem" } }}
+                      />
+                    </Box>
                   </Box>
                 </TableCell>
-              ))}
+              )}
+              <TableCell
+                sx={{
+                  bgcolor: selectMeal.find(
+                    (element: SelectMeal) =>
+                      element.mealId ===
+                      row.meals.find((item: Meals) => item.type === "Breakfast")?.id
+                  )?.status
+                    ? "secondary.main"
+                    : "background.paper",
+                }}
+              >
+                <Box
+                  sx={{
+                    height: "85px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  {row.meals.map(
+                    (meal: Meals) =>
+                      meal.type === "Breakfast" && (
+                        <>
+                          {meal.menus.map((menu: Menu, index: number) => (
+                            <Box key={index}>
+                              <Typography.Action
+                                sx={{
+                                  fontSize: "18px",
+                                  fontWeight: 400,
+                                  textAlign: "start",
+                                  whiteSpace: "nowrap",
+                                  lineHeight: "24px",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {menu.title}
+                              </Typography.Action>
+                            </Box>
+                          ))}
+                          <Typography.Detail
+                            onClick={() => handleDetail(meal.id)}
+                            sx={{
+                              width: "100%",
+                              cursor: "pointer",
+                              fontSize: "10px",
+                              color: "secondary.dark",
+                              lineHeight: "0.625rem",
+                            }}
+                          >
+                            {t("meal.check_detail")}
+                          </Typography.Detail>
+                        </>
+                      )
+                  )}
+                </Box>
+              </TableCell>
+              <TableCell
+                sx={{
+                  bgcolor: selectMeal.find(
+                    (element: SelectMeal) =>
+                      element.mealId === row.meals.find((item: Meals) => item.type === "Lunch")?.id
+                  )?.status
+                    ? "secondary.main"
+                    : "background.paper",
+                }}
+              >
+                <Box
+                  sx={{
+                    height: "85px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  {row.meals.map(
+                    (meal: Meals) =>
+                      meal.type === "Lunch" && (
+                        <>
+                          {meal.menus.map((menu: Menu, index: number) => (
+                            <Box key={index}>
+                              <Typography.Action
+                                sx={{
+                                  fontSize: "18px",
+                                  fontWeight: 400,
+                                  textAlign: "start",
+                                  whiteSpace: "nowrap",
+                                  lineHeight: "24px",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {menu.title}
+                              </Typography.Action>
+                            </Box>
+                          ))}
+                          <Typography.Detail
+                            onClick={() => handleDetail(meal.id)}
+                            sx={{
+                              width: "100%",
+                              cursor: "pointer",
+                              fontSize: "10px",
+                              color: "secondary.dark",
+                              lineHeight: "0.625rem",
+                            }}
+                          >
+                            {t("meal.check_detail")}
+                          </Typography.Detail>
+                        </>
+                      )
+                  )}
+                </Box>
+              </TableCell>
+              <TableCell
+                sx={{
+                  bgcolor: selectMeal.find(
+                    (element: SelectMeal) =>
+                      element.mealId ===
+                      row.meals.find((item: Meals) => item.type === "DinnerA")?.id
+                  )?.status
+                    ? "secondary.main"
+                    : "background.paper",
+                }}
+              >
+                <Box
+                  sx={{
+                    height: "85px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  {row.meals.map(
+                    (meal: Meals) =>
+                      meal.type === "DinnerA" && (
+                        <>
+                          {meal.menus.map((menu: Menu, index: number) => (
+                            <Box key={index}>
+                              <Typography.Action
+                                sx={{
+                                  fontSize: "18px",
+                                  fontWeight: 400,
+                                  textAlign: "start",
+                                  whiteSpace: "nowrap",
+                                  lineHeight: "24px",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {menu.title}
+                              </Typography.Action>
+                            </Box>
+                          ))}
+                          <Typography.Detail
+                            onClick={() => handleDetail(meal.id)}
+                            sx={{
+                              width: "100%",
+                              cursor: "pointer",
+                              fontSize: "10px",
+                              color: "secondary.dark",
+                              lineHeight: "0.625rem",
+                            }}
+                          >
+                            {t("meal.check_detail")}
+                          </Typography.Detail>
+                        </>
+                      )
+                  )}
+                </Box>
+              </TableCell>
+              <TableCell
+                sx={{
+                  bgcolor: selectMeal.find(
+                    (element: SelectMeal) =>
+                      element.mealId ===
+                      row.meals.find((item: Meals) => item.type === "DinnerB")?.id
+                  )?.status
+                    ? "secondary.main"
+                    : "background.paper",
+                }}
+              >
+                <Box
+                  sx={{
+                    height: "85px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  {row.meals.map(
+                    (meal: Meals) =>
+                      meal.type === "DinnerB" && (
+                        <>
+                          {meal.menus.map((menu: Menu, index: number) => (
+                            <Box key={index}>
+                              <Typography.Action
+                                sx={{
+                                  fontSize: "18px",
+                                  fontWeight: 400,
+                                  textAlign: "start",
+                                  whiteSpace: "nowrap",
+                                  lineHeight: "24px",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {menu.title}
+                              </Typography.Action>
+                            </Box>
+                          ))}
+                          <Typography.Detail
+                            onClick={() => handleDetail(meal.id)}
+                            sx={{
+                              width: "100%",
+                              cursor: "pointer",
+                              fontSize: "10px",
+                              color: "secondary.dark",
+                              lineHeight: "0.625rem",
+                            }}
+                          >
+                            {t("meal.check_detail")}
+                          </Typography.Detail>
+                        </>
+                      )
+                  )}
+                </Box>
+              </TableCell>
+              <TableCell
+                sx={{
+                  bgcolor: selectMeal.find(
+                    (element: SelectMeal) =>
+                      element.mealId ===
+                      row.meals.find((item: Meals) => item.type === "DinnerC")?.id
+                  )?.status
+                    ? "secondary.main"
+                    : "background.paper",
+                }}
+              >
+                <Box
+                  sx={{
+                    height: "85px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  {row.meals.map(
+                    (meal: Meals) =>
+                      meal.type === "DinnerC" && (
+                        <>
+                          {meal.menus.map((menu: Menu, index: number) => (
+                            <Box key={index}>
+                              <Typography.Action
+                                sx={{
+                                  fontSize: "18px",
+                                  fontWeight: 400,
+                                  textAlign: "start",
+                                  whiteSpace: "nowrap",
+                                  lineHeight: "24px",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {menu.title}
+                              </Typography.Action>
+                            </Box>
+                          ))}
+                          <Typography.Detail
+                            onClick={() => handleDetail(meal.id)}
+                            sx={{
+                              width: "100%",
+                              cursor: "pointer",
+                              fontSize: "10px",
+                              color: "secondary.dark",
+                              lineHeight: "0.625rem",
+                            }}
+                          >
+                            {t("meal.check_detail")}
+                          </Typography.Detail>
+                        </>
+                      )
+                  )}
+                </Box>
+              </TableCell>
+              <TableCell>
+                <Box
+                  sx={{
+                    height: "85px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  {row.meals.map(
+                    (meal: Meals) =>
+                      meal.type === "OtherMeal" && (
+                        <>
+                          {meal.menus.map((menu: Menu, index: number) => (
+                            <Box key={index}>
+                              <Typography.Action
+                                sx={{
+                                  fontSize: "18px",
+                                  fontWeight: 400,
+                                  textAlign: "start",
+                                  whiteSpace: "nowrap",
+                                  lineHeight: "24px",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {menu.title}
+                              </Typography.Action>
+                            </Box>
+                          ))}
+                          <Typography.Detail
+                            onClick={() => handleDetail(meal.id)}
+                            sx={{
+                              width: "100%",
+                              cursor: "pointer",
+                              fontSize: "10px",
+                              color: "secondary.dark",
+                              lineHeight: "0.625rem",
+                            }}
+                          >
+                            {t("meal.check_detail")}
+                          </Typography.Detail>
+                        </>
+                      )
+                  )}
+                </Box>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      {!!error && (
+        <Typography.Description color="error" sx={{ textAlign: "center", py: 3 }}>
+          {error}
+        </Typography.Description>
+      )}
+      {!error && content.length === 0 && !isLoading && (
+        <Typography.Description color="error" sx={{ textAlign: "center", py: 3 }}>
+          {t("user_list.no_data")}
+        </Typography.Description>
+      )}
+      {isLoading && (
+        <Box sx={{ display: "flex", justifyContent: "center", p: 2 }}>
+          <CircularProgress color="primary" />
+        </Box>
+      )}
       {variant === "pagination" && pagination && (
         <Box sx={{ display: "flex", justifyContent: "center", mt: "0.375rem" }}>
           <Pagination count={pagination.count} page={pagination.currentPage} color="primary" />

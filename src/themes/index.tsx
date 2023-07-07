@@ -29,6 +29,9 @@ export const Theme = createTheme({
       dark: "#F4F4F4",
       contrastText: "#2A6F1F",
     },
+    common: {
+      black: "#2B2A2A",
+    },
     error: {
       main: "#DA2A2A",
     },
