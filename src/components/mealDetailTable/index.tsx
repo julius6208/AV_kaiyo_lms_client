@@ -20,18 +20,34 @@ interface AdvancedTableParams<T> {
     count: number
     currentPage: number
   }
-  onDetail?: Function
+  isLoading?: boolean
+  error?: string
 }
 
 export const MealDetailTable = <T extends Record<string, any>>({
   content,
   fields,
-  onDetail,
+  isLoading,
+  error,
 }: AdvancedTableParams<T>) => {
   return (
     <ResponsiveUI
-      mobile={<MobileMealDetailTable fields={fields} content={content} onDetail={onDetail} />}
-      laptop={<DesktopMealDetailTable fields={fields} content={content} onDetail={onDetail} />}
+      mobile={
+        <MobileMealDetailTable
+          fields={fields}
+          content={content}
+          isLoading={isLoading}
+          error={error}
+        />
+      }
+      laptop={
+        <DesktopMealDetailTable
+          fields={fields}
+          content={content}
+          isLoading={isLoading}
+          error={error}
+        />
+      }
     />
   )
 }

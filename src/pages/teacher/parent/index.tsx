@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { CSVLink } from "react-csv"
 
 import {
   Box,
@@ -18,7 +19,7 @@ import { PAGE_SIZE } from "src/constants/common"
 import { IParentListFilters, IParentSorts, Parent } from "src/types/parent"
 import { getOptimizedParentListFilters } from "src/modules/filters"
 import { useGetExportParentList, useGetParentList } from "src/queries/parent"
-import { CSVLink } from "react-csv"
+import { useSession } from "src/modules/sessionProvider"
 
 const fields: FieldDefinition<Parent>[] = [
   {
@@ -71,6 +72,8 @@ const fields: FieldDefinition<Parent>[] = [
 
 export const ParentList: React.FC = () => {
   const { t } = useTranslation()
+  const session = useSession()
+
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
   const [displayCount, setDisplayCount] = useState<number>(PAGE_SIZE[0])
@@ -88,7 +91,16 @@ export const ParentList: React.FC = () => {
     data: parentData,
     isLoading,
     error,
-  } = useGetParentList(page, displayCount, "", sort, ids, fullName, fullNameKana, address)
+  } = useGetParentList(
+    page,
+    displayCount,
+    session?.value.tokenInfo.id_token || "",
+    sort,
+    ids,
+    fullName,
+    fullNameKana,
+    address
+  )
 
   const { data: parentExportData } = useGetExportParentList("")
 

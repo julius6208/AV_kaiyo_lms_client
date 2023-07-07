@@ -25,6 +25,9 @@ export {
   Pagination as MuiPagination,
   Paper,
   Popover,
+  LinearProgress,
+  linearProgressClasses,
+  styled,
   Radio,
   RadioGroup,
   Snackbar,
@@ -43,14 +46,15 @@ export {
 } from "@mui/material"
 
 export { type SvgIconTypeMap, type SelectChangeEvent } from "@mui/material"
-
 export {
   Circle as CircleIcon,
-  RadioButtonUnchecked as RadioButtonUncheckedIcon,
   Download as DownloadIcon,
+  LocalHospital as LocalHospitalIcon,
   Upload as UploadIcon,
+  MoreVert as MoreVertIcon,
   ExpandLess as ExpandLessIcon,
   ExpandMore as ExpandMoreIcon,
+  RadioButtonUnchecked as RadioButtonUncheckedIcon,
   KeyboardDoubleArrowUp as KeyboardDoubleArrowUpIcon,
   KeyboardDoubleArrowDown as KeyboardDoubleArrowDownIcon,
   UnfoldMore as UnfoldMoreIcon,
