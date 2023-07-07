@@ -137,14 +137,14 @@ export const MealManagement: React.FC = () => {
                 <Typography.Detail>{t("meal.breakfast")}</Typography.Detail>
                 <Typography.Detail>
                   {mealList?.data.totalBreakfast}
-                  {t("meal.yen")}
+                  {t("meal.meal_num")}
                 </Typography.Detail>
               </Box>
               <Box sx={{ display: "flex", gap: 2 }}>
                 <Typography.Detail>{t("meal.lunch")}</Typography.Detail>
                 <Typography.Detail>
                   {mealList?.data.totalLunch}
-                  {t("meal.yen")}
+                  {t("meal.meal_num")}
                 </Typography.Detail>
               </Box>
             </Box>
@@ -153,7 +153,7 @@ export const MealManagement: React.FC = () => {
                 <Typography.Detail>{t("meal.dinner")}</Typography.Detail>
                 <Typography.Detail>
                   {mealList?.data.totalDinner}
-                  {t("meal.yen")}
+                  {t("meal.meal_num")}
                 </Typography.Detail>
               </Box>
               <Box sx={{ display: "flex", gap: 2 }}>
