@@ -12,6 +12,14 @@ export const formattedDate = (dateString: string) => {
       `${dateObj.getDate().toString().padStart(2, "0")}-` +
       `${dateObj.getFullYear().toString().padStart(4, "0")} ` +
       `${dateObj.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true })}`
-    return newFormattedDate
+    return `${newFormattedDate}`
+  }
+}
+
+export const getDay = (dateString: string) => {
+  if (dateString) {
+    const dateObj = new Date(dateString)
+    const dayOfWeek = dateObj.toLocaleString("en-US", { weekday: "long" })
+    return `${dayOfWeek}`
   }
 }

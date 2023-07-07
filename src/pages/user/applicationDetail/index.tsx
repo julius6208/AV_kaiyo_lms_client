@@ -7,13 +7,19 @@ import { InputField } from "../newApply/components/field/inputField"
 
 import { useGetApplication } from "src/queries/application"
 import { formattedDate } from "src/modules/date"
+import { useSession } from "src/modules/sessionProvider"
 
 export const UserApplicationDetail: React.FC = () => {
   const { t } = useTranslation()
+  const session = useSession()
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const { data: applicationData, isLoading, error } = useGetApplication(id || "", "")
+  const {
+    data: applicationData,
+    isLoading,
+    error,
+  } = useGetApplication(id || "", session?.value.tokenInfo.id_token || "")
 
   if (isLoading) {
     return (

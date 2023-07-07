@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import axios, { AxiosError, AxiosResponse } from "axios"
 
-import { LoginLink } from "src/types/session"
 import { getApiClient } from "src/modules/axios"
 import { useGetMutation } from "src/modules/mutation"
 
@@ -29,10 +28,6 @@ const refresh = () => {
   }).post("/v1/auth/refresh")
 }
 
-export const useGetLoginLink = () => {
-  return useQuery<AxiosResponse<LoginLink>, AxiosError>(["getLoginLink"], () => getLoginLink())
-}
-
 export const useRefresh = ({ onSuccess, onError }: { onSuccess: Function; onError: Function }) => {
   return useGetMutation(refresh, onSuccess, onError)
 }
@@ -47,6 +42,16 @@ const getAuthCode = (link: any) => {
 
 export const useGetAuthCode = (link: any) => {
   return useQuery<AxiosResponse<any>, AxiosError>(["getAuthCode", link], () => getAuthCode(link))
+}
+
+export const useGetLoginLink = ({
+  onSuccess,
+  onError,
+}: {
+  onSuccess: Function
+  onError: Function
+}) => {
+  return useGetMutation(getLoginLink, onSuccess, onError)
 }
 
 export const useMicroSoftLogin = ({

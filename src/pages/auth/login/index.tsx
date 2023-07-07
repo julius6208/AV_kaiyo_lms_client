@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { AxiosError, AxiosResponse } from "axios"
 import { useRecoilState } from "recoil"
 import { useTranslation } from "react-i18next"
@@ -7,7 +7,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { Box, Image, Button } from "src/UILibrary"
 import { LoadingModal } from "src/components/shared/loadingModal"
 
-import { ISession } from "src/types/session"
+import { ISession, LoginLink } from "src/types/session"
 import { usePushAlerts } from "src/hooks/alerts"
 import { useSession } from "src/modules/sessionProvider"
 import { isLoginRefreshState } from "src/states/provider"
@@ -23,9 +23,9 @@ export const Login: React.FC = () => {
   const [searchParams] = useSearchParams()
   const [isLoginRefresh, setIsLoginRefresh] = useRecoilState(isLoginRefreshState)
 
-  const { data: loginLink, error: linkError } = useGetLoginLink()
+  const [loginLink, setLoginLink] = useState<LoginLink>({ loginLink: "" })
 
-  const { mutate: microSoftCodeLogin, isLoading } = useMicroSoftLogin({
+  const { mutate: microSoftCodeLogin } = useMicroSoftLogin({
     onSuccess: (res: AxiosResponse<ISession>) => {
       session?.setValue(res.data)
       navigate("/mypage")
@@ -36,13 +36,20 @@ export const Login: React.FC = () => {
     },
   })
 
-  const microsoftLogin = () => {
-    if (loginLink) {
-      window.location.href = loginLink?.data.loginLink
-    } else if (linkError) {
-      pushAlerts({ message: linkError.message, color: "error" })
+  const { mutate: microSoftLoginLink, isLoading } = useGetLoginLink({
+    onSuccess: (res: AxiosResponse<LoginLink>) => {
+      setLoginLink(res.data)
+    },
+    onError: (err: AxiosError) => {
+      pushAlerts({ message: err.message, color: "error" })
+    },
+  })
+
+  useEffect(() => {
+    if (loginLink.loginLink) {
+      window.location.href = loginLink.loginLink
     }
-  }
+  }, [loginLink])
 
   useEffect(() => {
     const code = searchParams.get("code") || ""
@@ -72,7 +79,7 @@ export const Login: React.FC = () => {
           color="primary"
           variant="contained"
           sx={{ mb: 2.5, mt: 5 }}
-          onClick={microsoftLogin}
+          onClick={microSoftLoginLink}
         >
           {t("login.login")}
         </Button>

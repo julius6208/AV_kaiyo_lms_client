@@ -2,6 +2,8 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 
 import {
+  Box,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -33,13 +35,16 @@ interface AdvancedTableParams<T> {
   content: T[]
   fields: FieldDefinition<T>[]
   idField?: string
-  onDetail?: Function
+  isLoading?: boolean
+  error?: string
 }
 
 export const MealDetailTable = <T extends Record<string, any>>({
   content,
   fields,
   idField = "id",
+  isLoading = false,
+  error,
 }: AdvancedTableParams<T>) => {
   const { t } = useTranslation()
 
@@ -114,6 +119,21 @@ export const MealDetailTable = <T extends Record<string, any>>({
           ))}
         </TableBody>
       </Table>
+      {!!error && (
+        <Typography.Description color="error" sx={{ textAlign: "center", py: 3 }}>
+          {error}
+        </Typography.Description>
+      )}
+      {!error && content.length === 0 && !isLoading && (
+        <Typography.Description color="error" sx={{ textAlign: "center", py: 3 }}>
+          {t("user_list.no_data")}
+        </Typography.Description>
+      )}
+      {isLoading && (
+        <Box sx={{ display: "flex", justifyContent: "center", p: 2 }}>
+          <CircularProgress color="primary" />
+        </Box>
+      )}
     </TableContainer>
   )
 }
