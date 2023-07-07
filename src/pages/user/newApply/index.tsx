@@ -88,10 +88,9 @@ export const NewApply: React.FC = () => {
   })
 
   const onAddApplication: SubmitHandler<Application> = (data) => {
-    console.log(data, "session data testing")
     addApplication({
       data: data,
-      token: "",
+      token: session?.value.tokenInfo.id_token || "",
     })
   }
 

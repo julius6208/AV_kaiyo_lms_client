@@ -20,6 +20,7 @@ import { usePushAlerts } from "src/hooks/alerts"
 import { getOptimizedStudentListFilters } from "src/modules/filters"
 import { IStudentListFilters, IStudentSorts, Student } from "src/types/student"
 import { useGetExportStudentList, useGetStudentList } from "src/queries/student"
+import { useSession } from "src/modules/sessionProvider"
 
 const fields: FieldDefinition<Student>[] = [
   {
@@ -124,6 +125,8 @@ const fields: FieldDefinition<Student>[] = [
 
 export const StudentList: React.FC = () => {
   const { t } = useTranslation()
+  const session = useSession()
+
   const pushAlerts = usePushAlerts()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
@@ -151,7 +154,7 @@ export const StudentList: React.FC = () => {
   } = useGetStudentList(
     page,
     displayCount,
-    "",
+    session?.value.tokenInfo.id_token || "",
     sort,
     ids,
     fullName,

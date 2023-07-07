@@ -16,7 +16,11 @@ export const MyPage: React.FC = () => {
 
   const [view, setView] = useState<"notification" | "profile">("notification")
 
-  const { data: userData } = useGetTeacherList("", session?.value.user.id as number)
+  const { data: userData } = useGetTeacherList(
+    session?.value.tokenInfo.id_token || "",
+    session?.value.user.id as number
+  )
+
   const switchView = () => {
     setView(view === "notification" ? "profile" : "notification")
   }
