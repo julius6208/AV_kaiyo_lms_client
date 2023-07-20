@@ -25,6 +25,7 @@ import { AuthenticationLayout } from "./components/authenticationLayout"
 import { OCREdit } from "./pages/teacher/pdfTransfer"
 import { SendReceive } from "./pages/teacher/sendReceive"
 import { ReSendEmail } from "./pages/teacher/reSendEmail"
+import { UserPDFNotification } from "./pages/user/pdfNotification"
 
 export function Body() {
   return (
@@ -65,6 +66,7 @@ export function Body() {
             <Route path="/meal-list" element={<UserMealList />} />
             <Route path="/meal/meal-data" element={<MealData />} />
             <Route path="/meal/meal-expense" element={<MealExpense />} />
+            <Route path="/pdfNotification" element={<UserPDFNotification />} />
           </Route>
         </Route>
         <Route
