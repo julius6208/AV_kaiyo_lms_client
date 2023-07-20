@@ -119,6 +119,7 @@ export const Sidebar: FC<DrawerProps> = ({ variant = "permanent", children, ...p
             color="secondary"
             variant="contained"
             sx={{ fontWeight: 500, borderRadius: "10px" }}
+            onClick={() => navigate("/navigate")}
           >
             {t("sidebar.back_to_home")}
           </Button>

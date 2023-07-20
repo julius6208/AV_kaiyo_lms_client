@@ -16,10 +16,9 @@ import { UserTable, FieldDefinition } from "src/components/userTable"
 import { SearchBox } from "./components/searchBox"
 
 import { PAGE_SIZE } from "src/constants/common"
-import { usePushAlerts } from "src/hooks/alerts"
 import { getOptimizedStudentListFilters } from "src/modules/filters"
 import { IStudentListFilters, IStudentSorts, Student } from "src/types/student"
-import { useGetExportStudentList, useGetStudentList } from "src/queries/student"
+import { useGetStudentList } from "src/queries/student"
 import { useSession } from "src/modules/sessionProvider"
 
 const fields: FieldDefinition<Student>[] = [
@@ -127,7 +126,6 @@ export const StudentList: React.FC = () => {
   const { t } = useTranslation()
   const session = useSession()
 
-  const pushAlerts = usePushAlerts()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
   const [displayCount, setDisplayCount] = useState<number>(PAGE_SIZE[0])
@@ -167,8 +165,6 @@ export const StudentList: React.FC = () => {
     curriculum,
     enrolledSibling
   )
-
-  const { data: studentExportData, error: exportError } = useGetExportStudentList("")
 
   const handleSearchParams = (
     sortBy: string,
@@ -274,9 +270,9 @@ export const StudentList: React.FC = () => {
     >
       <Box
         sx={{
-          //maxWidth: "1098px",
           width: "auto",
           height: "100%",
+          overflowX: "auto",
         }}
       >
         <Box
@@ -339,7 +335,7 @@ export const StudentList: React.FC = () => {
               </Select>
             </Box>
           </Box>
-          <CSVLink data={studentExportData?.data || ""} filename="student.csv">
+          <CSVLink data={studentData?.data.students || ""} filename="student.csv">
             <Button
               variant="contained"
               sx={{
@@ -348,9 +344,6 @@ export const StudentList: React.FC = () => {
                 mt: "3.125rem",
                 p: "0.5625rem 2rem",
               }}
-              onClick={() =>
-                exportError && pushAlerts({ message: exportError.message, color: "error" })
-              }
             >
               <Typography.Title
                 sx={{

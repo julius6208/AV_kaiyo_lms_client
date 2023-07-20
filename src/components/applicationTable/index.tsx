@@ -65,7 +65,12 @@ export const ApplicationListTable: React.FC<ApplicationTableProps> = ({
   const handleAllChecked = (value: boolean) => {
     if (setApproveApplicationIds && checkedApplicationIds && value === true) {
       setApproveApplicationIds([])
-      setApproveApplicationIds(applicationData.map((application) => application.id))
+      //setApproveApplicationIds(applicationData.map((application) => application.id))
+      setApproveApplicationIds(
+        applicationData
+          .filter((item) => item.status === "REQUESTED")
+          .map((application) => application.id)
+      )
     } else if (setApproveApplicationIds && checkedApplicationIds && value === false) {
       setApproveApplicationIds([])
     }
@@ -94,7 +99,7 @@ export const ApplicationListTable: React.FC<ApplicationTableProps> = ({
         }
         laptop={
           <>
-            <Table size="small" sx={{ tableLayout: "fixed" }}>
+            <Table size="small" sx={{ tableLayout: "fixed", width: "1090px" }}>
               <DesktopApplicationTableHeader
                 sortBy={sortBy}
                 sortOrder={sortOrder}
@@ -135,7 +140,7 @@ export const ApplicationListTable: React.FC<ApplicationTableProps> = ({
         </Box>
       )}
       {variant === "pagination" && pagination && (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: "0.375rem" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: "0.375rem", mb: "0.875rem" }}>
           <Pagination
             color="primary"
             count={pagination.count}

@@ -280,5 +280,8 @@
     "Saturday": "土",
     "Sunday": "日"
   },
+  "notification": {
+    "notification_history": "過去の通知履歴"
+  },
   "errors": {}
 }

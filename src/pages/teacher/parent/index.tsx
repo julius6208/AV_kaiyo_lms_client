@@ -18,7 +18,7 @@ import { SearchBox } from "./components/searchBox"
 import { PAGE_SIZE } from "src/constants/common"
 import { IParentListFilters, IParentSorts, Parent } from "src/types/parent"
 import { getOptimizedParentListFilters } from "src/modules/filters"
-import { useGetExportParentList, useGetParentList } from "src/queries/parent"
+import { useGetParentList } from "src/queries/parent"
 import { useSession } from "src/modules/sessionProvider"
 
 const fields: FieldDefinition<Parent>[] = [
@@ -102,8 +102,6 @@ export const ParentList: React.FC = () => {
     address
   )
 
-  const { data: parentExportData } = useGetExportParentList("")
-
   const handleSearchParams = (
     sortBy: string,
     sortOrder: string,
@@ -171,9 +169,9 @@ export const ParentList: React.FC = () => {
     >
       <Box
         sx={{
-          maxWidth: "1098px",
-          width: "100%",
+          width: "auto",
           height: "100%",
+          overflowX: "auto",
         }}
       >
         <Box
@@ -230,7 +228,7 @@ export const ParentList: React.FC = () => {
               </Select>
             </Box>
           </Box>
-          <CSVLink data={parentExportData?.data || ""} filename="parent.csv">
+          <CSVLink data={parentData?.data.parents || ""} filename="parent.csv">
             <Button
               variant="contained"
               sx={{
