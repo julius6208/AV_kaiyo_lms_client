@@ -76,7 +76,7 @@ export const UserTable = <T extends Record<string, any>>({
 
   return (
     <TableContainer sx={{ mt: "1.6875rem", display: "flex", flexDirection: "column" }}>
-      <Table size="small" sx={{ tableLayout: "fixed", width: "auto" }}>
+      <Table size="small" sx={{ tableLayout: "fixed", width: "1260px" }}>
         <TableHead>
           <TableRow
             sx={{
@@ -188,7 +188,7 @@ export const UserTable = <T extends Record<string, any>>({
         </Box>
       )}
       {variant === "pagination" && pagination && (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: "0.375rem" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: "0.375rem", mb: "0.875rem" }}>
           <Pagination
             color="primary"
             count={pagination.count}

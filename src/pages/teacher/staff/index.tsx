@@ -19,7 +19,7 @@ import { PAGE_SIZE } from "src/constants/common"
 import { getOptimizedTeacherListFilters } from "src/modules/filters"
 import { ITeacherListFilters, ITeacherSorts, Teacher } from "src/types/teacher"
 import { useGetTeacherList } from "src/queries/teacher"
-import { useGetExportTeacherList } from "src/queries/teacher"
+//import { useGetExportTeacherList } from "src/queries/teacher"
 import { useSession } from "src/modules/sessionProvider"
 
 const fields: FieldDefinition<Teacher>[] = [
@@ -93,8 +93,6 @@ export const StaffList: React.FC = () => {
     types
   )
 
-  const { data: teacherExportData } = useGetExportTeacherList("")
-
   const handleSearchParams = (
     sortBy: string,
     sortOrder: string,
@@ -162,9 +160,9 @@ export const StaffList: React.FC = () => {
     >
       <Box
         sx={{
-          maxWidth: "1098px",
-          width: "100%",
+          width: "auto",
           height: "100%",
+          overflowX: "auto",
         }}
       >
         <Box
@@ -221,7 +219,7 @@ export const StaffList: React.FC = () => {
               </Select>
             </Box>
           </Box>
-          <CSVLink data={teacherExportData?.data || ""} filename="teacher.csv">
+          <CSVLink data={teacherData?.data.teachers || ""} filename="teacher.csv">
             <Button
               variant="contained"
               sx={{

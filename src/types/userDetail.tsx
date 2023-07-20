@@ -17,10 +17,10 @@ export interface ITeacherInfo {
 
 export interface IStudentInfo {
   student: {
-    Club: {
-      id: number
-      name: string
-    }
+    // Club: {
+    //   id: number
+    //   name: string
+    // }
     Parent: {
       user: UserInfo
       userId: number
@@ -42,9 +42,10 @@ export interface IStudentInfo {
     birthday: string
     curriculum: string
     dormitory: string
+    club: string
     enrolledSiblings: string
     grade: number
-    learningG: number
+    learningGroup: string
     phone: string
     postCode: string
     createdAt: string

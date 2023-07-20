@@ -151,9 +151,9 @@ export const TeacherApplication: React.FC = () => {
     >
       <Box
         sx={{
-          maxWidth: "1098px",
-          width: "100%",
+          width: "auto",
           height: "100%",
+          overflowX: "auto",
         }}
       >
         <Box
