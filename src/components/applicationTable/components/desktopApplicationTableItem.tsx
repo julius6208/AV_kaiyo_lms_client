@@ -72,7 +72,7 @@ export const ApplicationTableItem: React.FC<ApplicationTableProps> = ({
       }}
     >
       <TableCell>
-        <Typography.Action sx={{ fontSize: "16px" }}>{content.student_id}</Typography.Action>
+        <Typography.Action sx={{ fontSize: "16px" }}>{content.id}</Typography.Action>
       </TableCell>
       <TableCell>
         <Typography.Action sx={{ fontSize: "16px" }}>{content.student_name}</Typography.Action>

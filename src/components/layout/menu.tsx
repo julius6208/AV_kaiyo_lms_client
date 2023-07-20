@@ -187,7 +187,7 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
         {
           label: "menu.pdf_transfer",
           icon: PDFIcon,
-          path: "/pdf-transfer",
+          path: "/pdfNotification",
         },
       ])
     } else if (session?.value.user.role === "parent") {
@@ -210,7 +210,7 @@ export const MenuLayout: FC<PropsWithChildren> = ({ children }) => {
         {
           label: "menu.pdf_transfer",
           icon: PDFIcon,
-          path: "/pdf-transfer",
+          path: "/pdfNotification",
         },
       ])
     } else if (session?.value.user.role === "meal-maker") {

@@ -145,20 +145,20 @@ export const MyPage: React.FC = () => {
               t("user_list.enrolled_sibling"),
               studentInfo.data.student.enrolledSiblings || ""
             )}
-            {renderDescriptionRow(
+            {/* {renderDescriptionRow(
               t("user_list.parent"),
               studentInfo.data.student.Parent.user.fullName || ""
-            )}
+            )} */}
             {renderDescriptionRow(t("mypage.postal_code"), studentInfo.data.student.postCode || "")}
             {renderDescriptionRow(
               t("mypage.address"),
-              "東京都新宿区戸山1-1-1-1111　VIVENタワー101号室"
+              "東京都新宿区戸山1-1-1-1111 VIVENタワー101号室"
             )}
             {renderDescriptionRow(`${t("mypage.phone")}`, studentInfo.data.student.phone || "")}
             {renderDescriptionRow(`${t("user_list.grade")}`, studentInfo.data.student.grade || 0)}
             {renderDescriptionRow(
               `${t("user_list.class")}`,
-              studentInfo.data.student.learningG || 0
+              studentInfo.data.student.learningGroup || ""
             )}
             {renderDescriptionRow(
               `${t("user_list.house")}`,
@@ -166,7 +166,7 @@ export const MyPage: React.FC = () => {
             )}
             {renderDescriptionRow(
               `${t("user_list.extra_activity")}`,
-              studentInfo.data.student.Club.name || ""
+              studentInfo.data.student.club || ""
             )}
             {/* {renderDescriptionRow(`${t("user_list.remark")}`, "テキスト")} */}
           </Stack>
